@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fbfaf6;
+  --foreground: #1c1f1c;
+
+  --color-primary-50: #eaf5ef;
+  --color-primary-100: #cde8db;
+  --color-primary-200: #a0d4b9;
+  --color-primary-300: #6cb992;
+  --color-primary-400: #3f9d72;
+  --color-primary-500: #1f7e56;
+  --color-primary-600: #146443;
+  --color-primary-700: #0f4f37;
+  --color-primary-800: #0c3f2c;
+  --color-primary-900: #0a3224;
+
+  --color-gold-50: #fbf6e9;
+  --color-gold-100: #f3e6bd;
+  --color-gold-200: #e9d38c;
+  --color-gold-300: #dcbb5c;
+  --color-gold-400: #cca43c;
+  --color-gold-500: #b08d2f;
+  --color-gold-600: #8f7025;
+
+  --color-neutral-50: #fbfaf6;
+  --color-neutral-100: #f2f0e9;
+  --color-neutral-200: #e4e1d6;
+  --color-neutral-300: #cdc9b8;
+  --color-neutral-600: #6b6a5f;
+  --color-neutral-700: #4a4942;
+  --color-neutral-800: #2e2d29;
+  --color-neutral-900: #1c1f1c;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-cairo);
+
+  --color-primary-50: var(--color-primary-50);
+  --color-primary-100: var(--color-primary-100);
+  --color-primary-200: var(--color-primary-200);
+  --color-primary-300: var(--color-primary-300);
+  --color-primary-400: var(--color-primary-400);
+  --color-primary-500: var(--color-primary-500);
+  --color-primary-600: var(--color-primary-600);
+  --color-primary-700: var(--color-primary-700);
+  --color-primary-800: var(--color-primary-800);
+  --color-primary-900: var(--color-primary-900);
+
+  --color-gold-50: var(--color-gold-50);
+  --color-gold-100: var(--color-gold-100);
+  --color-gold-200: var(--color-gold-200);
+  --color-gold-300: var(--color-gold-300);
+  --color-gold-400: var(--color-gold-400);
+  --color-gold-500: var(--color-gold-500);
+  --color-gold-600: var(--color-gold-600);
+
+  --color-neutral-50: var(--color-neutral-50);
+  --color-neutral-100: var(--color-neutral-100);
+  --color-neutral-200: var(--color-neutral-200);
+  --color-neutral-300: var(--color-neutral-300);
+  --color-neutral-600: var(--color-neutral-600);
+  --color-neutral-700: var(--color-neutral-700);
+  --color-neutral-800: var(--color-neutral-800);
+  --color-neutral-900: var(--color-neutral-900);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}

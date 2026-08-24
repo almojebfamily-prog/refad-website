@@ -1,0 +1,21 @@
+const stats = [
+  { value: "+300", label: "فرد من أفراد العائلة" },
+  { value: "+15", label: "مبادرة وبرنامج" },
+  { value: "100%", label: "حوكمة وشفافية" },
+];
+
+export function StatsBanner() {
+  return (
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+      {stats.map((stat) => (
+        <div
+          key={stat.label}
+          className="rounded-2xl border border-primary-700 bg-primary-800/60 px-6 py-8 text-center"
+        >
+          <p className="text-4xl font-extrabold text-gold-300">{stat.value}</p>
+          <p className="mt-2 text-sm font-medium text-primary-100">{stat.label}</p>
+        </div>
+      ))}
+    </div>
+  );
+}

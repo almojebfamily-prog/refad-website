@@ -1,0 +1,15 @@
+import { ForgotPasswordForm } from "@/components/forms/ForgotPasswordForm";
+
+export default function ForgotPasswordPage() {
+  return (
+    <>
+      <h1 className="mb-1 text-2xl font-bold text-primary-900">
+        إعادة تعيين كلمة المرور
+      </h1>
+      <p className="mb-6 text-sm text-neutral-600">
+        أدخل بريدك الإلكتروني المسجل وسنرسل لك رابطًا لإعادة تعيين كلمة المرور.
+      </p>
+      <ForgotPasswordForm />
+    </>
+  );
+}
