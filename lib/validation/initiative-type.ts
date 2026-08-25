@@ -1,0 +1,9 @@
+import * as z from "zod";
+
+export const InitiativeTypeFormSchema = z.object({
+  id: z.string().trim().optional(),
+  title: z.string().trim().min(2, "الرجاء إدخال اسم النوع."),
+  order_index: z.coerce.number().int().default(0),
+});
+
+export type InitiativeTypeFormState = { error?: string } | undefined;

@@ -6,9 +6,6 @@ create extension if not exists "pgcrypto";
 -- ── Enums ────────────────────────────────────────────────────────────────
 create type profile_role as enum ('member', 'admin');
 create type report_type as enum ('financial', 'performance', 'minutes');
-create type initiative_category as enum (
-  'social_support', 'scientific_excellence', 'gatherings', 'investment'
-);
 create type subscription_status as enum ('active', 'pending', 'expired');
 create type support_request_status as enum ('pending', 'rejected', 'completed');
 create type contact_message_status as enum ('new', 'read', 'archived');
@@ -63,9 +60,15 @@ create table board_members (
   bio text
 );
 
+create table initiative_types (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  order_index int not null default 0
+);
+
 create table initiatives (
   id uuid primary key default gen_random_uuid(),
-  category initiative_category not null,
+  initiative_type_id uuid not null references initiative_types (id) on delete cascade,
   title text not null,
   description text not null,
   icon text,

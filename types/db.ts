@@ -1,10 +1,5 @@
 export type ProfileRole = "member" | "admin";
 export type ReportType = "financial" | "performance" | "minutes";
-export type InitiativeCategory =
-  | "social_support"
-  | "scientific_excellence"
-  | "gatherings"
-  | "investment";
 export type SubscriptionStatus = "active" | "pending" | "expired";
 export type SupportRequestStatus = "pending" | "rejected" | "completed";
 export type ContactMessageStatus = "new" | "read" | "archived";
@@ -58,9 +53,15 @@ export type BoardMember = {
   bio: string | null;
 };
 
+export type InitiativeType = {
+  id: string;
+  title: string;
+  order_index: number;
+};
+
 export type Initiative = {
   id: string;
-  category: InitiativeCategory;
+  initiative_type_id: string;
   title: string;
   description: string;
   icon: string | null;

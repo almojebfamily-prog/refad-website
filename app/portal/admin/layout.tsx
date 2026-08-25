@@ -4,7 +4,8 @@ import { requireAdmin } from "@/lib/auth";
 const adminLinks = [
   { href: "/portal/admin", label: "نظرة عامة" },
   { href: "/portal/admin/board", label: "مجلس الأمناء" },
-  { href: "/portal/admin/initiatives", label: "المبادرات" },
+  { href: "/portal/admin/initiative-types", label: "أنواع المبادرات" },
+  { href: "/portal/admin/initiatives", label: "الخدمات الفرعية للمبادرات" },
   { href: "/portal/admin/reports", label: "التقارير" },
   { href: "/portal/admin/family-members", label: "شجرة العائلة" },
   { href: "/portal/admin/members", label: "الأعضاء" },

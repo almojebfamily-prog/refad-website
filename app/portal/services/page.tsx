@@ -1,5 +1,6 @@
 import { requireProfile } from "@/lib/auth";
-import { getInitiatives, initiativeCategoryLabels } from "@/lib/data/initiatives";
+import { getInitiativeTypes } from "@/lib/data/initiative-types";
+import { getInitiatives } from "@/lib/data/initiatives";
 import {
   getMySupportRequests,
   supportRequestStatusLabels,
@@ -11,7 +12,8 @@ import { EmptyState } from "@/components/shared/EmptyState";
 
 export default async function ServicesPage() {
   const profile = await requireProfile();
-  const [initiatives, myRequests] = await Promise.all([
+  const [types, initiatives, myRequests] = await Promise.all([
+    getInitiativeTypes().catch(() => []),
     getInitiatives().catch(() => []),
     getMySupportRequests(profile.id).catch(() => null),
   ]);
@@ -27,16 +29,24 @@ export default async function ServicesPage() {
         </p>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2">
-        {initiatives.map((initiative) => (
-          <Card key={initiative.id}>
-            <p className="mb-1 text-xs font-semibold text-gold-600">
-              {initiativeCategoryLabels[initiative.category]}
-            </p>
-            <h3 className="font-bold text-primary-900">{initiative.title}</h3>
-            <p className="mt-1 text-sm text-neutral-600">{initiative.description}</p>
-          </Card>
-        ))}
+      <div className="space-y-8">
+        {types.map((type) => {
+          const items = initiatives.filter((i) => i.initiative_type_id === type.id);
+          if (items.length === 0) return null;
+          return (
+            <div key={type.id}>
+              <h2 className="mb-3 text-lg font-bold text-primary-900">{type.title}</h2>
+              <div className="grid gap-6 sm:grid-cols-2">
+                {items.map((initiative) => (
+                  <Card key={initiative.id}>
+                    <h3 className="font-bold text-primary-900">{initiative.title}</h3>
+                    <p className="mt-1 text-sm text-neutral-600">{initiative.description}</p>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       <div className="grid gap-8 lg:grid-cols-2">

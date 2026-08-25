@@ -11,14 +11,33 @@ insert into board_members (full_name, role_title, order_index, bio) values
   ('نواف المعجب', 'عضو مجلس الأمناء', 5, null),
   ('تركي المعجب', 'عضو مجلس الأمناء', 6, null);
 
--- ── Initiatives ──────────────────────────────────────────────────────────
-insert into initiatives (category, title, description, order_index) values
-  ('social_support', 'الإغاثة الطارئة', 'دعم عاجل لأفراد العائلة في الحالات الطارئة والظروف الاستثنائية.', 1),
-  ('social_support', 'إعانة الزواج', 'مساهمة مالية للمقبلين على الزواج من أبناء العائلة.', 2),
-  ('social_support', 'المساعدة الصحية', 'دعم تكاليف العلاج للحالات الصحية غير المغطاة.', 3),
-  ('scientific_excellence', 'برنامج التفوق العلمي', 'تكريم الأوائل من الطلاب والمواهب الواعدة في العائلة.', 4),
-  ('gatherings', 'اللقاءات والفعاليات العائلية', 'تنظيم لقاءات دورية ومناسبات اجتماعية لتعزيز التواصل.', 5),
-  ('investment', 'الاستثمار وتنمية الأصول', 'مبادرات لتنمية أصول الصندوق وضمان استدامته المالية.', 6);
+-- ── Initiative types & their sub-services ───────────────────────────────
+insert into initiative_types (title, order_index) values
+  ('الدعم الاجتماعي', 1),
+  ('التفوق العلمي', 2),
+  ('اللقاءات والفعاليات', 3),
+  ('الاستثمار والتنمية', 4);
+
+with t as (select id from initiative_types where title = 'الدعم الاجتماعي')
+insert into initiatives (initiative_type_id, title, description, order_index)
+select t.id, v.title, v.description, v.order_index
+from t, (values
+  ('الإغاثة الطارئة', 'دعم عاجل لأفراد العائلة في الحالات الطارئة والظروف الاستثنائية.', 1),
+  ('إعانة الزواج', 'مساهمة مالية للمقبلين على الزواج من أبناء العائلة.', 2),
+  ('المساعدة الصحية', 'دعم تكاليف العلاج للحالات الصحية غير المغطاة.', 3)
+) as v(title, description, order_index);
+
+with t as (select id from initiative_types where title = 'التفوق العلمي')
+insert into initiatives (initiative_type_id, title, description, order_index)
+select t.id, 'برنامج التفوق العلمي', 'تكريم الأوائل من الطلاب والمواهب الواعدة في العائلة.', 1 from t;
+
+with t as (select id from initiative_types where title = 'اللقاءات والفعاليات')
+insert into initiatives (initiative_type_id, title, description, order_index)
+select t.id, 'اللقاءات والفعاليات العائلية', 'تنظيم لقاءات دورية ومناسبات اجتماعية لتعزيز التواصل.', 1 from t;
+
+with t as (select id from initiative_types where title = 'الاستثمار والتنمية')
+insert into initiatives (initiative_type_id, title, description, order_index)
+select t.id, 'الاستثمار وتنمية الأصول', 'مبادرات لتنمية أصول الصندوق وضمان استدامته المالية.', 1 from t;
 
 -- ── Reports ──────────────────────────────────────────────────────────────
 -- file_url values are placeholders; replaced with real Vercel Blob URLs

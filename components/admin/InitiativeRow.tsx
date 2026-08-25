@@ -5,16 +5,23 @@ import { Pencil } from "lucide-react";
 import { InitiativeForm } from "@/components/admin/InitiativeForm";
 import { DeleteButton } from "@/components/admin/DeleteButton";
 import { deleteInitiative } from "@/app/actions/admin/initiatives";
-import { initiativeCategoryLabels } from "@/lib/labels/initiatives";
-import type { Initiative } from "@/types/db";
+import type { Initiative, InitiativeType } from "@/types/db";
 
-export function InitiativeRow({ initiative }: { initiative: Initiative }) {
+export function InitiativeRow({
+  initiative,
+  types,
+  typeName,
+}: {
+  initiative: Initiative;
+  types: InitiativeType[];
+  typeName: string;
+}) {
   const [editing, setEditing] = useState(false);
 
   if (editing) {
     return (
       <div className="rounded-xl border border-primary-200 bg-primary-50/40 p-4">
-        <InitiativeForm initiative={initiative} onDone={() => setEditing(false)} />
+        <InitiativeForm initiative={initiative} types={types} onDone={() => setEditing(false)} />
       </div>
     );
   }
@@ -22,9 +29,7 @@ export function InitiativeRow({ initiative }: { initiative: Initiative }) {
   return (
     <div className="flex items-center justify-between rounded-xl border border-neutral-200 bg-white p-4">
       <div>
-        <p className="mb-0.5 text-xs font-semibold text-gold-600">
-          {initiativeCategoryLabels[initiative.category]}
-        </p>
+        <p className="mb-0.5 text-xs font-semibold text-gold-600">{typeName}</p>
         <p className="font-medium text-primary-900">{initiative.title}</p>
       </div>
       <div className="flex items-center gap-1">

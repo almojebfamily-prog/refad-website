@@ -13,7 +13,7 @@ export async function saveInitiative(
 
   const validatedFields = InitiativeFormSchema.safeParse({
     id: formData.get("id") || undefined,
-    category: formData.get("category"),
+    initiative_type_id: formData.get("initiative_type_id"),
     title: formData.get("title"),
     description: formData.get("description"),
     order_index: formData.get("order_index") || 0,
@@ -23,20 +23,20 @@ export async function saveInitiative(
     return { error: validatedFields.error.issues[0]?.message };
   }
 
-  const { id, category, title, description, order_index } = validatedFields.data;
+  const { id, initiative_type_id, title, description, order_index } = validatedFields.data;
 
   try {
     if (id) {
       await sql`
         UPDATE initiatives
-        SET category = ${category}, title = ${title},
+        SET initiative_type_id = ${initiative_type_id}, title = ${title},
             description = ${description}, order_index = ${order_index}
         WHERE id = ${id}
       `;
     } else {
       await sql`
-        INSERT INTO initiatives (category, title, description, order_index)
-        VALUES (${category}, ${title}, ${description}, ${order_index})
+        INSERT INTO initiatives (initiative_type_id, title, description, order_index)
+        VALUES (${initiative_type_id}, ${title}, ${description}, ${order_index})
       `;
     }
   } catch {
@@ -44,6 +44,7 @@ export async function saveInitiative(
   }
 
   revalidatePath("/portal/admin/initiatives");
+  revalidatePath("/portal/admin/initiative-types");
   revalidatePath("/refad-fund/initiatives");
   revalidatePath("/portal/services");
   return undefined;
@@ -54,6 +55,7 @@ export async function deleteInitiative(id: string) {
   await sql`DELETE FROM initiatives WHERE id = ${id}`;
 
   revalidatePath("/portal/admin/initiatives");
+  revalidatePath("/portal/admin/initiative-types");
   revalidatePath("/refad-fund/initiatives");
   revalidatePath("/portal/services");
 }
