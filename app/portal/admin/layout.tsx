@@ -8,6 +8,7 @@ const adminLinks = [
   { href: "/portal/admin/reports", label: "التقارير" },
   { href: "/portal/admin/family-members", label: "شجرة العائلة" },
   { href: "/portal/admin/members", label: "الأعضاء" },
+  { href: "/portal/admin/support-requests", label: "طلبات الدعم" },
   { href: "/portal/admin/messages", label: "رسائل التواصل" },
   { href: "/portal/admin/media/family-news", label: "أخبار العائلة" },
   { href: "/portal/admin/media/fund-news", label: "أخبار الصندوق" },

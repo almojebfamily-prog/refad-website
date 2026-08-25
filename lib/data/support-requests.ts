@@ -1,5 +1,7 @@
 import { sql } from "@/lib/db";
-import type { SupportRequest } from "@/types/db";
+import type { SupportRequest, SupportRequestWithDetails } from "@/types/db";
+
+export { supportRequestStatusLabels } from "@/lib/labels/support-requests";
 
 export async function getMySupportRequests(profileId: string) {
   return (await sql`
@@ -9,9 +11,12 @@ export async function getMySupportRequests(profileId: string) {
   `) as SupportRequest[];
 }
 
-export const supportRequestStatusLabels = {
-  pending: "قيد المراجعة",
-  approved: "تمت الموافقة",
-  rejected: "مرفوض",
-  completed: "مكتمل",
-} as const;
+export async function getAllSupportRequests() {
+  return (await sql`
+    SELECT sr.*, p.full_name AS member_name, i.title AS initiative_title
+    FROM support_requests sr
+    JOIN profiles p ON p.id = sr.profile_id
+    LEFT JOIN initiatives i ON i.id = sr.initiative_id
+    ORDER BY sr.created_at DESC
+  `) as SupportRequestWithDetails[];
+}

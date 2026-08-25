@@ -99,6 +99,11 @@ export type SupportRequest = {
   created_at: string;
 };
 
+export type SupportRequestWithDetails = SupportRequest & {
+  member_name: string;
+  initiative_title: string | null;
+};
+
 export type ContactMessage = {
   id: string;
   full_name: string;
