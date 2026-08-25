@@ -12,6 +12,13 @@ const refadFundLinks = [
   { href: "/refad-fund/reports", label: "التقارير" },
 ];
 
+const mediaCenterLinks = [
+  { href: "/media-center/family-news", label: "أخبار العائلة" },
+  { href: "/media-center/fund-news", label: "أخبار الصندوق" },
+  { href: "/media-center/videos", label: "مكتبة الفيديو" },
+  { href: "/media-center/magazine", label: "مجلة العائلة" },
+];
+
 const navLinks = [
   { href: "/", label: "الرئيسية" },
   { href: "/about-family", label: "عن الأسرة" },
@@ -20,6 +27,7 @@ const navLinks = [
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [fundOpen, setFundOpen] = useState(false);
+  const [mediaOpen, setMediaOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 border-b border-neutral-200 bg-background/95 backdrop-blur">
@@ -75,12 +83,32 @@ export function Header() {
               )}
             </div>
 
-            <Link
-              href="/media-center"
-              className="text-sm font-medium text-neutral-700 transition-colors hover:text-primary-700"
+            <div
+              className="relative"
+              onMouseEnter={() => setMediaOpen(true)}
+              onMouseLeave={() => setMediaOpen(false)}
             >
-              مركز الإعلام
-            </Link>
+              <Link
+                href="/media-center"
+                className="flex items-center gap-1 text-sm font-medium text-neutral-700 transition-colors hover:text-primary-700"
+              >
+                مركز الإعلام
+                <ChevronDown className="h-4 w-4" />
+              </Link>
+              {mediaOpen && (
+                <div className="absolute end-0 top-full min-w-48 rounded-xl border border-neutral-200 bg-white py-2 shadow-lg">
+                  {mediaCenterLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="block px-4 py-2 text-sm text-neutral-700 hover:bg-primary-50 hover:text-primary-800"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
 
             <Link
               href="/contact"
@@ -139,13 +167,19 @@ export function Header() {
               {link.label}
             </Link>
           ))}
-          <Link
-            href="/media-center"
-            className="rounded-lg px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-primary-50"
-            onClick={() => setMobileOpen(false)}
-          >
+          <p className="mt-2 px-3 text-xs font-semibold text-neutral-600">
             مركز الإعلام
-          </Link>
+          </p>
+          {mediaCenterLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="rounded-lg px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-primary-50"
+              onClick={() => setMobileOpen(false)}
+            >
+              {link.label}
+            </Link>
+          ))}
           <Link
             href="/contact"
             className="rounded-lg px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-primary-50"
