@@ -1,6 +1,13 @@
-export const supportRequestStatusLabels = {
+import type { SupportRequestStatus } from "@/types/db";
+
+export const supportRequestStatusLabels: Record<SupportRequestStatus, string> = {
   pending: "قيد المراجعة",
-  approved: "تمت الموافقة",
-  rejected: "مرفوض",
   completed: "مكتمل",
-} as const;
+  rejected: "مرفوض",
+};
+
+export const supportRequestStatusStyles: Record<SupportRequestStatus, string> = {
+  pending: "bg-gold-100 text-gold-700",
+  completed: "bg-primary-50 text-primary-700",
+  rejected: "bg-red-100 text-red-700",
+};

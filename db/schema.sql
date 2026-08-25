@@ -10,9 +10,7 @@ create type initiative_category as enum (
   'social_support', 'scientific_excellence', 'gatherings', 'investment'
 );
 create type subscription_status as enum ('active', 'pending', 'expired');
-create type support_request_status as enum (
-  'pending', 'approved', 'rejected', 'completed'
-);
+create type support_request_status as enum ('pending', 'rejected', 'completed');
 create type contact_message_status as enum ('new', 'read', 'archived');
 create type gender as enum ('male', 'female');
 create type news_category as enum ('family', 'fund');
@@ -99,6 +97,7 @@ create table support_requests (
   initiative_id uuid references initiatives (id) on delete set null,
   description text not null,
   status support_request_status not null default 'pending',
+  admin_comment text,
   created_at timestamptz not null default now()
 );
 

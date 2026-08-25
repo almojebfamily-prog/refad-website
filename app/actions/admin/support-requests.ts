@@ -5,12 +5,17 @@ import { requireAdmin } from "@/lib/auth";
 import { sql } from "@/lib/db";
 import type { SupportRequestStatus } from "@/types/db";
 
-export async function updateSupportRequestStatus(
+export async function updateSupportRequest(
   id: string,
-  status: SupportRequestStatus
+  status: SupportRequestStatus,
+  adminComment: string
 ) {
   await requireAdmin();
-  await sql`UPDATE support_requests SET status = ${status} WHERE id = ${id}`;
+  await sql`
+    UPDATE support_requests
+    SET status = ${status}, admin_comment = ${adminComment.trim() || null}
+    WHERE id = ${id}
+  `;
 
   revalidatePath("/portal/admin/support-requests");
   revalidatePath("/portal/admin");

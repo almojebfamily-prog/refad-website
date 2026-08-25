@@ -1,6 +1,10 @@
 import { requireProfile } from "@/lib/auth";
 import { getInitiatives, initiativeCategoryLabels } from "@/lib/data/initiatives";
-import { getMySupportRequests, supportRequestStatusLabels } from "@/lib/data/support-requests";
+import {
+  getMySupportRequests,
+  supportRequestStatusLabels,
+  supportRequestStatusStyles,
+} from "@/lib/data/support-requests";
 import { SupportRequestForm } from "@/components/portal/SupportRequestForm";
 import { Card } from "@/components/shared/Card";
 import { EmptyState } from "@/components/shared/EmptyState";
@@ -63,11 +67,25 @@ export default async function ServicesPage() {
                         initiativeTitleById.get(request.initiative_id)) ??
                         "خدمة"}
                     </p>
-                    <span className="rounded-full bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-700">
+                    <span
+                      className={`rounded-full px-3 py-1 text-xs font-semibold ${supportRequestStatusStyles[request.status]}`}
+                    >
                       {supportRequestStatusLabels[request.status]}
                     </span>
                   </div>
                   <p className="mt-2 text-sm text-neutral-600">{request.description}</p>
+                  {request.admin_comment && (
+                    <p
+                      className={`mt-3 rounded-lg p-3 text-sm ${
+                        request.status === "rejected"
+                          ? "bg-red-50 text-red-700"
+                          : "bg-neutral-50 text-neutral-700"
+                      }`}
+                    >
+                      <span className="font-semibold">ملاحظة الإدارة: </span>
+                      {request.admin_comment}
+                    </p>
+                  )}
                 </Card>
               ))}
             </div>

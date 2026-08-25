@@ -6,11 +6,7 @@ export type InitiativeCategory =
   | "gatherings"
   | "investment";
 export type SubscriptionStatus = "active" | "pending" | "expired";
-export type SupportRequestStatus =
-  | "pending"
-  | "approved"
-  | "rejected"
-  | "completed";
+export type SupportRequestStatus = "pending" | "rejected" | "completed";
 export type ContactMessageStatus = "new" | "read" | "archived";
 export type Gender = "male" | "female";
 export type NewsCategory = "family" | "fund";
@@ -96,6 +92,7 @@ export type SupportRequest = {
   initiative_id: string | null;
   description: string;
   status: SupportRequestStatus;
+  admin_comment: string | null;
   created_at: string;
 };
 

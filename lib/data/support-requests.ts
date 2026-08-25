@@ -1,7 +1,10 @@
 import { sql } from "@/lib/db";
 import type { SupportRequest, SupportRequestWithDetails } from "@/types/db";
 
-export { supportRequestStatusLabels } from "@/lib/labels/support-requests";
+export {
+  supportRequestStatusLabels,
+  supportRequestStatusStyles,
+} from "@/lib/labels/support-requests";
 
 export async function getMySupportRequests(profileId: string) {
   return (await sql`
