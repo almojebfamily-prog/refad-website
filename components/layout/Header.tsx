@@ -14,8 +14,7 @@ const refadFundLinks = [
 
 const navLinks = [
   { href: "/", label: "الرئيسية" },
-  { href: "/about-family", label: "عن العائلة" },
-  { href: "/contact", label: "تواصل معنا" },
+  { href: "/about-family", label: "عن الأسرة" },
 ];
 
 export function Header() {
@@ -46,7 +45,7 @@ export function Header() {
               href="/about-family"
               className="text-sm font-medium text-neutral-700 transition-colors hover:text-primary-700"
             >
-              عن العائلة
+              عن الأسرة
             </Link>
 
             <div
@@ -75,6 +74,13 @@ export function Header() {
                 </div>
               )}
             </div>
+
+            <Link
+              href="/media-center"
+              className="text-sm font-medium text-neutral-700 transition-colors hover:text-primary-700"
+            >
+              مركز الإعلام
+            </Link>
 
             <Link
               href="/contact"
@@ -133,6 +139,20 @@ export function Header() {
               {link.label}
             </Link>
           ))}
+          <Link
+            href="/media-center"
+            className="rounded-lg px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-primary-50"
+            onClick={() => setMobileOpen(false)}
+          >
+            مركز الإعلام
+          </Link>
+          <Link
+            href="/contact"
+            className="rounded-lg px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-primary-50"
+            onClick={() => setMobileOpen(false)}
+          >
+            تواصل معنا
+          </Link>
           <Link
             href="/login"
             className="mt-3 rounded-full bg-primary-700 px-5 py-2.5 text-center text-sm font-semibold text-white"

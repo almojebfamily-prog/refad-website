@@ -15,6 +15,14 @@ export function MemberForm() {
         required
         className="rounded-lg border border-neutral-300 px-3 py-2 text-sm"
       />
+      <input
+        name="national_id"
+        placeholder="رقم الهوية الوطنية (اختياري)"
+        dir="ltr"
+        inputMode="numeric"
+        maxLength={10}
+        className="rounded-lg border border-neutral-300 px-3 py-2 text-sm"
+      />
       <select
         name="role"
         defaultValue="member"

@@ -6,9 +6,7 @@ import { InitiativeForm } from "@/components/admin/InitiativeForm";
 import { DeleteButton } from "@/components/admin/DeleteButton";
 import { deleteInitiative } from "@/app/actions/admin/initiatives";
 import { initiativeCategoryLabels } from "@/lib/labels/initiatives";
-import type { Database } from "@/types/database.types";
-
-type Initiative = Database["public"]["Tables"]["initiatives"]["Row"];
+import type { Initiative } from "@/types/db";
 
 export function InitiativeRow({ initiative }: { initiative: Initiative }) {
   const [editing, setEditing] = useState(false);

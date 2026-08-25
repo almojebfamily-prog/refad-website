@@ -1,6 +1,6 @@
--- Sample content for local/demo use. Run after 0001_init.sql.
--- Auth users (member + admin demo accounts) are created separately —
--- see supabase/README.md — because auth.users needs the Admin API.
+-- Sample content for local/demo use. Run after schema.sql.
+-- The first admin account is created separately — see README.md — via the
+-- bootstrap script, since it needs a bcrypt hash generated in Node.
 
 -- ── Board of Trustees ────────────────────────────────────────────────────
 insert into board_members (full_name, role_title, order_index, bio) values
@@ -21,13 +21,13 @@ insert into initiatives (category, title, description, order_index) values
   ('investment', 'الاستثمار وتنمية الأصول', 'مبادرات لتنمية أصول الصندوق وضمان استدامته المالية.', 6);
 
 -- ── Reports ──────────────────────────────────────────────────────────────
--- file_url values are placeholders; replace with real paths once report
--- files are uploaded to the "reports" storage bucket via the admin panel.
+-- file_url values are placeholders; replaced with real Vercel Blob URLs
+-- once report files are uploaded via the admin panel.
 insert into reports (type, title, period_label, published_date, file_url) values
-  ('financial', 'التقرير المالي السنوي', '2025', '2026-01-15', 'reports/financial-2025.pdf'),
-  ('financial', 'التقرير المالي النصف سنوي', 'النصف الأول 2025', '2025-07-10', 'reports/financial-h1-2025.pdf'),
-  ('performance', 'تقرير الإنجازات السنوي', '2025', '2026-01-20', 'reports/performance-2025.pdf'),
-  ('minutes', 'محضر اجتماع الجمعية العمومية', 'يناير 2026', '2026-01-25', 'reports/minutes-2026-01.pdf');
+  ('financial', 'التقرير المالي السنوي', '2025', '2026-01-15', 'https://example.com/reports/financial-2025.pdf'),
+  ('financial', 'التقرير المالي النصف سنوي', 'النصف الأول 2025', '2025-07-10', 'https://example.com/reports/financial-h1-2025.pdf'),
+  ('performance', 'تقرير الإنجازات السنوي', '2025', '2026-01-20', 'https://example.com/reports/performance-2025.pdf'),
+  ('minutes', 'محضر اجتماع الجمعية العمومية', 'يناير 2026', '2026-01-25', 'https://example.com/reports/minutes-2026-01.pdf');
 
 -- ── Family branches & sample tree ────────────────────────────────────────
 with root_branch as (
@@ -42,7 +42,7 @@ with grandfather as (
   select id from family_branches where name = 'الفرع الرئيسي'
 )
 insert into family_members (full_name, gender, birth_date, father_id, branch_id)
-select v.full_name, v.gender, v.birth_date, grandfather.id, branch.id
+select v.full_name, v.gender::gender, v.birth_date::date, grandfather.id, branch.id
 from grandfather, branch,
   (values
     ('عبدالله المعجب', 'male', '1955-03-10'),
@@ -56,7 +56,7 @@ with father as (
   select id from family_branches where name = 'الفرع الرئيسي'
 )
 insert into family_members (full_name, gender, birth_date, father_id, branch_id)
-select v.full_name, v.gender, v.birth_date, father.id, branch.id
+select v.full_name, v.gender::gender, v.birth_date::date, father.id, branch.id
 from father, branch,
   (values
     ('فهد المعجب', 'male', '1985-02-14'),

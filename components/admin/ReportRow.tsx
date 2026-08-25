@@ -4,9 +4,7 @@ import { FileText } from "lucide-react";
 import { DeleteButton } from "@/components/admin/DeleteButton";
 import { deleteReport } from "@/app/actions/admin/reports";
 import { reportTypeLabels } from "@/lib/labels/reports";
-import type { Database } from "@/types/database.types";
-
-type Report = Database["public"]["Tables"]["reports"]["Row"];
+import type { Report } from "@/types/db";
 
 export function ReportRow({ report }: { report: Report }) {
   return (

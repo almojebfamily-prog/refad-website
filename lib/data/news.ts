@@ -1,0 +1,12 @@
+import { sql } from "@/lib/db";
+import type { NewsCategory, NewsItem } from "@/types/db";
+
+export { newsCategoryLabels } from "@/lib/labels/news";
+
+export async function getNewsByCategory(category: NewsCategory) {
+  return (await sql`
+    SELECT * FROM news_items
+    WHERE category = ${category}
+    ORDER BY published_date DESC
+  `) as NewsItem[];
+}

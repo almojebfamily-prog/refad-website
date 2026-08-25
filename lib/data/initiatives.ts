@@ -1,14 +1,10 @@
-import { createClient } from "@/lib/supabase/server";
+import { sql } from "@/lib/db";
+import type { Initiative } from "@/types/db";
 
 export { initiativeCategoryLabels } from "@/lib/labels/initiatives";
 
 export async function getInitiatives() {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("initiatives")
-    .select("*")
-    .order("order_index", { ascending: true });
-
-  if (error) throw error;
-  return data;
+  return (await sql`
+    SELECT * FROM initiatives ORDER BY order_index ASC
+  `) as Initiative[];
 }

@@ -4,9 +4,7 @@ import { useState, useTransition } from "react";
 import { ChevronDown, ChevronUp, Mail } from "lucide-react";
 import { updateContactMessageStatus } from "@/app/actions/admin/contact-messages";
 import { cn } from "@/lib/utils";
-import type { ContactMessageStatus, Database } from "@/types/database.types";
-
-type ContactMessage = Database["public"]["Tables"]["contact_messages"]["Row"];
+import type { ContactMessage, ContactMessageStatus } from "@/types/db";
 
 const statusLabels: Record<ContactMessageStatus, string> = {
   new: "جديدة",

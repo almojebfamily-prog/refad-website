@@ -4,7 +4,7 @@ import { FundSubNav } from "@/components/refad-fund/FundSubNav";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { getInitiatives, initiativeCategoryLabels } from "@/lib/data/initiatives";
 import { GraduationCap, HandHeart, PartyPopper, TrendingUp } from "lucide-react";
-import type { InitiativeCategory } from "@/types/database.types";
+import type { InitiativeCategory } from "@/types/db";
 
 const categoryIcons: Record<InitiativeCategory, React.ComponentType<{ className?: string }>> = {
   social_support: HandHeart,

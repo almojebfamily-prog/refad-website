@@ -1,12 +1,8 @@
-import { createClient } from "@/lib/supabase/server";
+import { sql } from "@/lib/db";
+import type { Profile } from "@/types/db";
 
 export async function getAllProfiles() {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (error) throw error;
-  return data;
+  return (await sql`
+    SELECT * FROM profiles ORDER BY created_at DESC
+  `) as Profile[];
 }

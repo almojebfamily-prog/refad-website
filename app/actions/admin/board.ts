@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
+import { sql } from "@/lib/db";
 import { BoardMemberFormSchema, type BoardMemberFormState } from "@/lib/validation/board";
 
 export async function saveBoardMember(
@@ -23,13 +23,25 @@ export async function saveBoardMember(
     return { error: validatedFields.error.issues[0]?.message };
   }
 
-  const { id, ...values } = validatedFields.data;
-  const supabase = await createClient();
-  const { error } = id
-    ? await supabase.from("board_members").update(values).eq("id", id)
-    : await supabase.from("board_members").insert(values);
+  const { id, full_name, role_title, bio, order_index } = validatedFields.data;
 
-  if (error) return { error: "تعذر حفظ البيانات." };
+  try {
+    if (id) {
+      await sql`
+        UPDATE board_members
+        SET full_name = ${full_name}, role_title = ${role_title},
+            bio = ${bio ?? null}, order_index = ${order_index}
+        WHERE id = ${id}
+      `;
+    } else {
+      await sql`
+        INSERT INTO board_members (full_name, role_title, bio, order_index)
+        VALUES (${full_name}, ${role_title}, ${bio ?? null}, ${order_index})
+      `;
+    }
+  } catch {
+    return { error: "تعذر حفظ البيانات." };
+  }
 
   revalidatePath("/portal/admin/board");
   revalidatePath("/refad-fund/board-of-trustees");
@@ -38,8 +50,7 @@ export async function saveBoardMember(
 
 export async function deleteBoardMember(id: string) {
   await requireAdmin();
-  const supabase = await createClient();
-  await supabase.from("board_members").delete().eq("id", id);
+  await sql`DELETE FROM board_members WHERE id = ${id}`;
 
   revalidatePath("/portal/admin/board");
   revalidatePath("/refad-fund/board-of-trustees");

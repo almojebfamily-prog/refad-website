@@ -1,29 +1,19 @@
-import { createClient } from "@/lib/supabase/server";
+import { sql } from "@/lib/db";
 import { Card } from "@/components/shared/Card";
 
 async function getCounts() {
-  const supabase = await createClient();
-  const [members, requests, messages, subscriptions] = await Promise.all([
-    supabase.from("profiles").select("id", { count: "exact", head: true }),
-    supabase
-      .from("support_requests")
-      .select("id", { count: "exact", head: true })
-      .eq("status", "pending"),
-    supabase
-      .from("contact_messages")
-      .select("id", { count: "exact", head: true })
-      .eq("status", "new"),
-    supabase
-      .from("subscriptions")
-      .select("id", { count: "exact", head: true })
-      .eq("status", "active"),
-  ]);
+  const [[members], [requests], [messages], [subscriptions]] = await Promise.all([
+    sql`SELECT COUNT(*)::int AS count FROM profiles`,
+    sql`SELECT COUNT(*)::int AS count FROM support_requests WHERE status = 'pending'`,
+    sql`SELECT COUNT(*)::int AS count FROM contact_messages WHERE status = 'new'`,
+    sql`SELECT COUNT(*)::int AS count FROM subscriptions WHERE status = 'active'`,
+  ]) as { count: number }[][];
 
   return {
-    members: members.count ?? 0,
-    pendingRequests: requests.count ?? 0,
-    newMessages: messages.count ?? 0,
-    activeSubscriptions: subscriptions.count ?? 0,
+    members: members.count,
+    pendingRequests: requests.count,
+    newMessages: messages.count,
+    activeSubscriptions: subscriptions.count,
   };
 }
 

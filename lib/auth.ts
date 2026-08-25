@@ -1,34 +1,44 @@
 import "server-only";
 import { cache } from "react";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { sql } from "@/lib/db";
+import { SESSION_COOKIE, verifySessionToken } from "@/lib/session";
+import type { Profile } from "@/types/db";
 
-export const getCurrentUser = cache(async () => {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  return user;
+const getCurrentSession = cache(async () => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get(SESSION_COOKIE)?.value;
+  if (!token) return null;
+  return verifySessionToken(token);
 });
 
-export const getCurrentProfile = cache(async () => {
-  const user = await getCurrentUser();
-  if (!user) return null;
+export const getCurrentUser = cache(async () => {
+  const session = await getCurrentSession();
+  if (!session) return null;
 
-  const supabase = await createClient();
-  const { data } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user.id)
-    .single();
+  const rows = (await sql`
+    SELECT id, email FROM users WHERE id = ${session.sub}
+  `) as { id: string; email: string }[];
 
-  return data;
+  return rows[0] ?? null;
+});
+
+export const getCurrentProfile = cache(async (): Promise<Profile | null> => {
+  const session = await getCurrentSession();
+  if (!session) return null;
+
+  const rows = (await sql`
+    SELECT * FROM profiles WHERE id = ${session.sub}
+  `) as Profile[];
+
+  return rows[0] ?? null;
 });
 
 export async function requireUser() {
-  const user = await getCurrentUser();
-  if (!user) redirect("/login");
-  return user;
+  const session = await getCurrentSession();
+  if (!session) redirect("/login");
+  return session;
 }
 
 export async function requireProfile() {

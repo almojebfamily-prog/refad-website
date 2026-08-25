@@ -1,15 +1,12 @@
-import { createClient } from "@/lib/supabase/server";
+import { sql } from "@/lib/db";
+import type { Subscription } from "@/types/db";
 
 export async function getMySubscriptions(profileId: string) {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("subscriptions")
-    .select("*")
-    .eq("profile_id", profileId)
-    .order("start_date", { ascending: false });
-
-  if (error) throw error;
-  return data;
+  return (await sql`
+    SELECT * FROM subscriptions
+    WHERE profile_id = ${profileId}
+    ORDER BY start_date DESC
+  `) as Subscription[];
 }
 
 export const subscriptionStatusLabels = {

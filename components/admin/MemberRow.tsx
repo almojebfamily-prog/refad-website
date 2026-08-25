@@ -1,15 +1,19 @@
 "use client";
 
-import { useTransition } from "react";
-import { User } from "lucide-react";
+import { useState, useTransition } from "react";
+import { Check, User } from "lucide-react";
 import { DeleteButton } from "@/components/admin/DeleteButton";
-import { deleteMember, updateMemberRole } from "@/app/actions/admin/members";
-import type { Database, ProfileRole } from "@/types/database.types";
-
-type Profile = Database["public"]["Tables"]["profiles"]["Row"];
+import {
+  deleteMember,
+  updateMemberNationalId,
+  updateMemberRole,
+} from "@/app/actions/admin/members";
+import type { Profile, ProfileRole } from "@/types/db";
 
 export function MemberRow({ profile }: { profile: Profile }) {
   const [isPending, startTransition] = useTransition();
+  const [nationalId, setNationalId] = useState(profile.national_id ?? "");
+  const [nationalIdError, setNationalIdError] = useState<string | undefined>();
 
   return (
     <div className="flex items-center justify-between rounded-xl border border-neutral-200 bg-white p-4">
@@ -23,6 +27,37 @@ export function MemberRow({ profile }: { profile: Profile }) {
         </div>
       </div>
       <div className="flex items-center gap-2">
+        <div>
+          <div className="flex items-center gap-1">
+            <input
+              value={nationalId}
+              onChange={(e) => setNationalId(e.target.value)}
+              disabled={isPending}
+              dir="ltr"
+              inputMode="numeric"
+              maxLength={10}
+              placeholder="رقم الهوية الوطنية"
+              className="w-36 rounded-lg border border-neutral-300 px-2 py-1.5 text-xs"
+            />
+            <button
+              type="button"
+              disabled={isPending}
+              onClick={() =>
+                startTransition(async () => {
+                  const result = await updateMemberNationalId(profile.id, nationalId);
+                  setNationalIdError(result.error);
+                })
+              }
+              className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-primary-700 hover:bg-primary-50 disabled:opacity-50"
+              aria-label="حفظ رقم الهوية"
+            >
+              <Check className="h-3.5 w-3.5" />
+            </button>
+          </div>
+          {nationalIdError && (
+            <p className="mt-1 text-xs text-red-600">{nationalIdError}</p>
+          )}
+        </div>
         <select
           defaultValue={profile.role}
           disabled={isPending}

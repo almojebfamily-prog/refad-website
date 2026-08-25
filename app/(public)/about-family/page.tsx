@@ -26,7 +26,7 @@ export default function AboutFamilyPage() {
   return (
     <>
       <PageHeader
-        eyebrow="عن العائلة"
+        eyebrow="عن الأسرة"
         title="عائلة المعجب"
         description="تاريخ عريق ومبادئ راسخة تجمعنا على مر الأجيال."
       />

@@ -16,6 +16,7 @@ export default async function ProfilePage() {
       <ProfileForm
         fullName={profile.full_name}
         phone={profile.phone}
+        nationalId={profile.national_id}
         email={user?.email}
       />
     </div>

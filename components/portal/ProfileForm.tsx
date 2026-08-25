@@ -7,10 +7,12 @@ import { Button } from "@/components/shared/Button";
 export function ProfileForm({
   fullName,
   phone,
+  nationalId,
   email,
 }: {
   fullName: string;
   phone: string | null;
+  nationalId: string | null;
   email: string | undefined;
 }) {
   const [state, action, pending] = useActionState(updateProfile, undefined);
@@ -39,6 +41,20 @@ export function ProfileForm({
           dir="ltr"
           defaultValue={phone ?? ""}
           className="w-full rounded-lg border border-neutral-300 px-4 py-2.5 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+        />
+      </div>
+
+      <div>
+        <label htmlFor="national_id" className="mb-1.5 block text-sm font-medium text-neutral-800">
+          رقم الهوية الوطنية
+        </label>
+        <input
+          id="national_id"
+          dir="ltr"
+          value={nationalId ?? ""}
+          disabled
+          placeholder="لم يتم تسجيله بعد — يتم تعديله من قِبل الإدارة فقط"
+          className="w-full rounded-lg border border-neutral-200 bg-neutral-100 px-4 py-2.5 text-sm text-neutral-500"
         />
       </div>
 

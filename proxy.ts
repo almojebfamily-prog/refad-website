@@ -1,8 +1,25 @@
-import { type NextRequest } from "next/server";
-import { updateSession } from "@/lib/supabase/middleware";
+import { NextResponse, type NextRequest } from "next/server";
+import { SESSION_COOKIE, verifySessionToken } from "@/lib/session";
 
 export async function proxy(request: NextRequest) {
-  return await updateSession(request);
+  const { pathname } = request.nextUrl;
+  const isPortalRoute = pathname.startsWith("/portal");
+  if (!isPortalRoute) return NextResponse.next();
+
+  const token = request.cookies.get(SESSION_COOKIE)?.value;
+  const session = token ? await verifySessionToken(token) : null;
+
+  if (!session) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("next", pathname);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  if (pathname.startsWith("/portal/admin") && session.role !== "admin") {
+    return NextResponse.redirect(new URL("/portal", request.url));
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {

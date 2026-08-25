@@ -4,9 +4,7 @@ import { useActionState } from "react";
 import { saveInitiative } from "@/app/actions/admin/initiatives";
 import { initiativeCategoryLabels } from "@/lib/labels/initiatives";
 import { Button } from "@/components/shared/Button";
-import type { Database } from "@/types/database.types";
-
-type Initiative = Database["public"]["Tables"]["initiatives"]["Row"];
+import type { Initiative } from "@/types/db";
 
 export function InitiativeForm({
   initiative,

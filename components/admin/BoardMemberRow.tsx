@@ -5,9 +5,7 @@ import { Pencil, User } from "lucide-react";
 import { BoardMemberForm } from "@/components/admin/BoardMemberForm";
 import { DeleteButton } from "@/components/admin/DeleteButton";
 import { deleteBoardMember } from "@/app/actions/admin/board";
-import type { Database } from "@/types/database.types";
-
-type BoardMember = Database["public"]["Tables"]["board_members"]["Row"];
+import type { BoardMember } from "@/types/db";
 
 export function BoardMemberRow({ member }: { member: BoardMember }) {
   const [editing, setEditing] = useState(false);

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
+import { sql } from "@/lib/db";
 import {
   FamilyMemberFormSchema,
   type FamilyMemberFormState,
@@ -17,6 +17,7 @@ export async function saveFamilyMember(
   const validatedFields = FamilyMemberFormSchema.safeParse({
     id: formData.get("id") || undefined,
     full_name: formData.get("full_name"),
+    national_id: formData.get("national_id"),
     gender: formData.get("gender"),
     birth_date: formData.get("birth_date"),
     father_id: formData.get("father_id"),
@@ -27,13 +28,27 @@ export async function saveFamilyMember(
     return { error: validatedFields.error.issues[0]?.message };
   }
 
-  const { id, ...values } = validatedFields.data;
-  const supabase = await createClient();
-  const { error } = id
-    ? await supabase.from("family_members").update(values).eq("id", id)
-    : await supabase.from("family_members").insert(values);
+  const { id, full_name, national_id, gender, birth_date, father_id, mother_id } =
+    validatedFields.data;
 
-  if (error) return { error: "تعذر حفظ البيانات." };
+  try {
+    if (id) {
+      await sql`
+        UPDATE family_members
+        SET full_name = ${full_name}, national_id = ${national_id ?? null}, gender = ${gender},
+            birth_date = ${birth_date ?? null}, father_id = ${father_id ?? null},
+            mother_id = ${mother_id ?? null}
+        WHERE id = ${id}
+      `;
+    } else {
+      await sql`
+        INSERT INTO family_members (full_name, national_id, gender, birth_date, father_id, mother_id)
+        VALUES (${full_name}, ${national_id ?? null}, ${gender}, ${birth_date ?? null}, ${father_id ?? null}, ${mother_id ?? null})
+      `;
+    }
+  } catch {
+    return { error: "تعذر حفظ البيانات." };
+  }
 
   revalidatePath("/portal/admin/family-members");
   revalidatePath("/portal/family-tree");
@@ -42,8 +57,7 @@ export async function saveFamilyMember(
 
 export async function deleteFamilyMember(id: string) {
   await requireAdmin();
-  const supabase = await createClient();
-  await supabase.from("family_members").delete().eq("id", id);
+  await sql`DELETE FROM family_members WHERE id = ${id}`;
 
   revalidatePath("/portal/admin/family-members");
   revalidatePath("/portal/family-tree");

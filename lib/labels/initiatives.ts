@@ -1,4 +1,4 @@
-import type { InitiativeCategory } from "@/types/database.types";
+import type { InitiativeCategory } from "@/types/db";
 
 export const initiativeCategoryLabels: Record<InitiativeCategory, string> = {
   social_support: "الدعم الاجتماعي",

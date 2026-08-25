@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Pencil, User } from "lucide-react";
+import { Link2, Pencil, User } from "lucide-react";
 import { FamilyMemberForm } from "@/components/admin/FamilyMemberForm";
 import { DeleteButton } from "@/components/admin/DeleteButton";
 import { deleteFamilyMember } from "@/app/actions/admin/family-members";
-import type { Database } from "@/types/database.types";
-
-type FamilyMember = Database["public"]["Tables"]["family_members"]["Row"];
+import type { FamilyMember } from "@/types/db";
 
 export function FamilyMemberRow({
   member,
@@ -42,6 +40,18 @@ export function FamilyMemberRow({
           <p className="text-xs text-neutral-500">
             {father ? `الأب: ${father.full_name}` : "بدون أب محدد"}
           </p>
+          {member.profile_id ? (
+            <p className="mt-0.5 flex items-center gap-1 text-xs font-medium text-primary-700">
+              <Link2 className="h-3 w-3" />
+              مرتبط بحساب
+            </p>
+          ) : (
+            member.national_id && (
+              <p dir="ltr" className="mt-0.5 text-xs text-neutral-400">
+                {member.national_id}
+              </p>
+            )
+          )}
         </div>
       </div>
       <div className="flex items-center gap-1">

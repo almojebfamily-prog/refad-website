@@ -2,8 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { sql } from "@/lib/db";
+import { hashPassword } from "@/lib/password";
 import { CreateMemberFormSchema, type MemberFormState } from "@/lib/validation/member";
+import { NationalIdSchema } from "@/lib/validation/profile";
 
 export async function createMember(
   _prevState: MemberFormState,
@@ -13,6 +15,7 @@ export async function createMember(
 
   const validatedFields = CreateMemberFormSchema.safeParse({
     full_name: formData.get("full_name"),
+    national_id: formData.get("national_id"),
     email: formData.get("email"),
     password: formData.get("password"),
     role: formData.get("role"),
@@ -22,44 +25,78 @@ export async function createMember(
     return { error: validatedFields.error.issues[0]?.message };
   }
 
-  const { full_name, email, password, role } = validatedFields.data;
-  const admin = createAdminClient();
+  const { full_name, national_id, email, password, role } = validatedFields.data;
+  const passwordHash = await hashPassword(password);
 
-  const { data: created, error: createError } = await admin.auth.admin.createUser({
-    email,
-    password,
-    email_confirm: true,
-  });
-
-  if (createError || !created.user) {
+  let userId: string;
+  try {
+    const rows = (await sql`
+      INSERT INTO users (email, password_hash)
+      VALUES (${email}, ${passwordHash})
+      RETURNING id
+    `) as { id: string }[];
+    userId = rows[0].id;
+  } catch {
     return { error: "تعذر إنشاء الحساب. تأكد من أن البريد الإلكتروني غير مستخدم." };
   }
 
-  const { error: profileError } = await admin
-    .from("profiles")
-    .insert({ id: created.user.id, full_name, role });
-
-  if (profileError) {
-    await admin.auth.admin.deleteUser(created.user.id);
+  try {
+    await sql`
+      INSERT INTO profiles (id, full_name, national_id, role)
+      VALUES (${userId}, ${full_name}, ${national_id ?? null}, ${role})
+    `;
+  } catch {
+    await sql`DELETE FROM users WHERE id = ${userId}`;
     return { error: "تعذر إنشاء الملف الشخصي للعضو." };
   }
 
+  // Link this new account to a matching family-tree entry, if one was
+  // added by ID number before this account existed.
+  if (national_id) {
+    await sql`
+      UPDATE family_members
+      SET profile_id = ${userId}
+      WHERE national_id = ${national_id} AND profile_id IS NULL
+    `;
+  }
+
   revalidatePath("/portal/admin/members");
+  revalidatePath("/portal/admin/family-members");
+  revalidatePath("/portal/family-tree");
   return undefined;
 }
 
 export async function updateMemberRole(id: string, role: "member" | "admin") {
   await requireAdmin();
-  const admin = createAdminClient();
-  await admin.from("profiles").update({ role }).eq("id", id);
+  await sql`UPDATE profiles SET role = ${role} WHERE id = ${id}`;
 
   revalidatePath("/portal/admin/members");
 }
 
+export async function updateMemberNationalId(id: string, nationalId: string) {
+  await requireAdmin();
+
+  const trimmed = nationalId.trim();
+  if (!trimmed) {
+    await sql`UPDATE profiles SET national_id = NULL WHERE id = ${id}`;
+    revalidatePath("/portal/admin/members");
+    return {};
+  }
+
+  const validated = NationalIdSchema.safeParse(trimmed);
+  if (!validated.success) {
+    return { error: validated.error.issues[0]?.message };
+  }
+
+  await sql`UPDATE profiles SET national_id = ${validated.data} WHERE id = ${id}`;
+  revalidatePath("/portal/admin/members");
+  return {};
+}
+
 export async function deleteMember(id: string) {
   await requireAdmin();
-  const admin = createAdminClient();
-  await admin.auth.admin.deleteUser(id);
+  // profiles.id references users(id) on delete cascade
+  await sql`DELETE FROM users WHERE id = ${id}`;
 
   revalidatePath("/portal/admin/members");
 }

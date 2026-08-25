@@ -1,7 +1,5 @@
-import { createClient } from "@/lib/supabase/server";
-import type { Database } from "@/types/database.types";
-
-type FamilyMemberRow = Database["public"]["Tables"]["family_members"]["Row"];
+import { sql } from "@/lib/db";
+import type { FamilyMember } from "@/types/db";
 
 export type FamilyTreeNode = {
   name: string;
@@ -9,17 +7,13 @@ export type FamilyTreeNode = {
   children?: FamilyTreeNode[];
 };
 
-export async function getFamilyMembers(): Promise<FamilyMemberRow[]> {
-  const supabase = await createClient();
-  const { data, error } = await supabase.from("family_members").select("*");
-
-  if (error) throw error;
-  return data;
+export async function getFamilyMembers(): Promise<FamilyMember[]> {
+  return (await sql`SELECT * FROM family_members`) as FamilyMember[];
 }
 
-export function buildFamilyTree(members: FamilyMemberRow[]): FamilyTreeNode[] {
+export function buildFamilyTree(members: FamilyMember[]): FamilyTreeNode[] {
   const byId = new Map(members.map((m) => [m.id, m]));
-  const childrenByFather = new Map<string, FamilyMemberRow[]>();
+  const childrenByFather = new Map<string, FamilyMember[]>();
 
   for (const member of members) {
     if (!member.father_id) continue;
@@ -28,7 +22,7 @@ export function buildFamilyTree(members: FamilyMemberRow[]): FamilyTreeNode[] {
     childrenByFather.set(member.father_id, list);
   }
 
-  function toNode(member: FamilyMemberRow): FamilyTreeNode {
+  function toNode(member: FamilyMember): FamilyTreeNode {
     const children = childrenByFather.get(member.id);
     return {
       name: member.full_name,

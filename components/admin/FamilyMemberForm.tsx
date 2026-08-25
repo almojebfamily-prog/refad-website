@@ -3,9 +3,7 @@
 import { useActionState } from "react";
 import { saveFamilyMember } from "@/app/actions/admin/family-members";
 import { Button } from "@/components/shared/Button";
-import type { Database } from "@/types/database.types";
-
-type FamilyMember = Database["public"]["Tables"]["family_members"]["Row"];
+import type { FamilyMember } from "@/types/db";
 
 export function FamilyMemberForm({
   member,
@@ -27,6 +25,15 @@ export function FamilyMemberForm({
         placeholder="الاسم الكامل"
         defaultValue={member?.full_name}
         required
+        className="rounded-lg border border-neutral-300 px-3 py-2 text-sm"
+      />
+      <input
+        name="national_id"
+        placeholder="رقم الهوية الوطنية (لربط الحساب لاحقًا)"
+        dir="ltr"
+        inputMode="numeric"
+        maxLength={10}
+        defaultValue={member?.national_id ?? ""}
         className="rounded-lg border border-neutral-300 px-3 py-2 text-sm"
       />
       <select

@@ -1,0 +1,61 @@
+import Link from "next/link";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { Section } from "@/components/shared/Section";
+import { BookOpen, Newspaper, PlayCircle, Radio } from "lucide-react";
+
+const sections = [
+  {
+    href: "/media-center/family-news",
+    icon: Newspaper,
+    title: "أخبار العائلة",
+    description: "آخر مستجدات وأخبار عائلة المعجب.",
+  },
+  {
+    href: "/media-center/fund-news",
+    icon: Radio,
+    title: "أخبار الصندوق",
+    description: "آخر مستجدات وأخبار صندوق رفاد العائلي.",
+  },
+  {
+    href: "/media-center/videos",
+    icon: PlayCircle,
+    title: "مكتبة الفيديو",
+    description: "مقاطع فيديو من فعاليات ومبادرات العائلة والصندوق.",
+  },
+  {
+    href: "/media-center/magazine",
+    icon: BookOpen,
+    title: "مجلة العائلة",
+    description: "أعداد مجلة العائلة الدورية.",
+  },
+];
+
+export default function MediaCenterPage() {
+  return (
+    <>
+      <PageHeader
+        eyebrow="مركز الإعلام"
+        title="مركز الإعلام"
+        description="آخر أخبار العائلة والصندوق، ومكتبة الفيديو، ومجلة العائلة."
+      />
+
+      <Section>
+        <div className="grid gap-6 sm:grid-cols-2">
+          {sections.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="group rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+            >
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary-50 text-primary-700 transition-colors group-hover:bg-primary-600 group-hover:text-white">
+                <item.icon className="h-6 w-6" />
+              </div>
+              <h2 className="text-lg font-bold text-primary-900">{item.title}</h2>
+              <p className="mt-2 text-sm text-neutral-600">{item.description}</p>
+            </Link>
+          ))}
+        </div>
+      </Section>
+    </>
+  );
+}

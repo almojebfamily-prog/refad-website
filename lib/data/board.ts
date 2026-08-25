@@ -1,12 +1,8 @@
-import { createClient } from "@/lib/supabase/server";
+import { sql } from "@/lib/db";
+import type { BoardMember } from "@/types/db";
 
 export async function getBoardMembers() {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("board_members")
-    .select("*")
-    .order("order_index", { ascending: true });
-
-  if (error) throw error;
-  return data;
+  return (await sql`
+    SELECT * FROM board_members ORDER BY order_index ASC
+  `) as BoardMember[];
 }

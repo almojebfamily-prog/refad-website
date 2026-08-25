@@ -2,14 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 import { requireUser } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
+import { sql } from "@/lib/db";
 import { ProfileFormSchema, type ProfileFormState } from "@/lib/validation/profile";
 
 export async function updateProfile(
   _prevState: ProfileFormState,
   formData: FormData
 ): Promise<ProfileFormState> {
-  const user = await requireUser();
+  const session = await requireUser();
 
   const validatedFields = ProfileFormSchema.safeParse({
     full_name: formData.get("full_name"),
@@ -20,13 +20,15 @@ export async function updateProfile(
     return { error: validatedFields.error.issues[0]?.message };
   }
 
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("profiles")
-    .update(validatedFields.data)
-    .eq("id", user.id);
+  const { full_name, phone } = validatedFields.data;
 
-  if (error) {
+  try {
+    await sql`
+      UPDATE profiles
+      SET full_name = ${full_name}, phone = ${phone ?? null}
+      WHERE id = ${session.sub}
+    `;
+  } catch {
     return { error: "تعذر حفظ التغييرات، حاول مرة أخرى." };
   }
 

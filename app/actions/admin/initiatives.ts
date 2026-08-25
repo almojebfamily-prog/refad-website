@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
+import { sql } from "@/lib/db";
 import { InitiativeFormSchema, type InitiativeFormState } from "@/lib/validation/initiative";
 
 export async function saveInitiative(
@@ -23,13 +23,25 @@ export async function saveInitiative(
     return { error: validatedFields.error.issues[0]?.message };
   }
 
-  const { id, ...values } = validatedFields.data;
-  const supabase = await createClient();
-  const { error } = id
-    ? await supabase.from("initiatives").update(values).eq("id", id)
-    : await supabase.from("initiatives").insert(values);
+  const { id, category, title, description, order_index } = validatedFields.data;
 
-  if (error) return { error: "تعذر حفظ البيانات." };
+  try {
+    if (id) {
+      await sql`
+        UPDATE initiatives
+        SET category = ${category}, title = ${title},
+            description = ${description}, order_index = ${order_index}
+        WHERE id = ${id}
+      `;
+    } else {
+      await sql`
+        INSERT INTO initiatives (category, title, description, order_index)
+        VALUES (${category}, ${title}, ${description}, ${order_index})
+      `;
+    }
+  } catch {
+    return { error: "تعذر حفظ البيانات." };
+  }
 
   revalidatePath("/portal/admin/initiatives");
   revalidatePath("/refad-fund/initiatives");
@@ -39,8 +51,7 @@ export async function saveInitiative(
 
 export async function deleteInitiative(id: string) {
   await requireAdmin();
-  const supabase = await createClient();
-  await supabase.from("initiatives").delete().eq("id", id);
+  await sql`DELETE FROM initiatives WHERE id = ${id}`;
 
   revalidatePath("/portal/admin/initiatives");
   revalidatePath("/refad-fund/initiatives");

@@ -3,9 +3,7 @@
 import { useActionState } from "react";
 import { saveBoardMember } from "@/app/actions/admin/board";
 import { Button } from "@/components/shared/Button";
-import type { Database } from "@/types/database.types";
-
-type BoardMember = Database["public"]["Tables"]["board_members"]["Row"];
+import type { BoardMember } from "@/types/db";
 
 export function BoardMemberForm({
   member,

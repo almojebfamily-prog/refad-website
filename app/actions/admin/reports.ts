@@ -1,8 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { put, del } from "@vercel/blob";
 import { requireAdmin } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
+import { sql } from "@/lib/db";
 import { ReportFormSchema, type ReportFormState } from "@/lib/validation/report";
 
 export async function createReport(
@@ -27,23 +28,26 @@ export async function createReport(
     return { error: "الرجاء اختيار ملف التقرير (PDF)." };
   }
 
-  const supabase = await createClient();
-  const path = `${validatedFields.data.type}/${crypto.randomUUID()}-${file.name}`;
+  const { type, title, period_label, published_date } = validatedFields.data;
 
-  const { error: uploadError } = await supabase.storage
-    .from("reports")
-    .upload(path, file);
-
-  if (uploadError) {
+  let fileUrl: string;
+  try {
+    const blob = await put(`reports/${type}/${crypto.randomUUID()}-${file.name}`, file, {
+      access: "public",
+    });
+    fileUrl = blob.url;
+  } catch {
     return { error: "تعذر رفع الملف." };
   }
 
-  const { error } = await supabase.from("reports").insert({
-    ...validatedFields.data,
-    file_url: `reports/${path}`,
-  });
-
-  if (error) return { error: "تعذر حفظ بيانات التقرير." };
+  try {
+    await sql`
+      INSERT INTO reports (type, title, period_label, published_date, file_url)
+      VALUES (${type}, ${title}, ${period_label ?? null}, ${published_date}, ${fileUrl})
+    `;
+  } catch {
+    return { error: "تعذر حفظ بيانات التقرير." };
+  }
 
   revalidatePath("/portal/admin/reports");
   revalidatePath("/refad-fund/reports");
@@ -52,12 +56,9 @@ export async function createReport(
 
 export async function deleteReport(id: string, fileUrl: string) {
   await requireAdmin();
-  const supabase = await createClient();
 
-  await supabase.storage
-    .from("reports")
-    .remove([fileUrl.replace(/^reports\//, "")]);
-  await supabase.from("reports").delete().eq("id", id);
+  await del(fileUrl).catch(() => {});
+  await sql`DELETE FROM reports WHERE id = ${id}`;
 
   revalidatePath("/portal/admin/reports");
   revalidatePath("/refad-fund/reports");

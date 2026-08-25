@@ -1,12 +1,8 @@
-import { createClient } from "@/lib/supabase/server";
+import { sql } from "@/lib/db";
+import type { ContactMessage } from "@/types/db";
 
 export async function getContactMessages() {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("contact_messages")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (error) throw error;
-  return data;
+  return (await sql`
+    SELECT * FROM contact_messages ORDER BY created_at DESC
+  `) as ContactMessage[];
 }

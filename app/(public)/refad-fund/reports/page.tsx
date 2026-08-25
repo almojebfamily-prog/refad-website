@@ -2,8 +2,8 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import { Section } from "@/components/shared/Section";
 import { FundSubNav } from "@/components/refad-fund/FundSubNav";
 import { EmptyState } from "@/components/shared/EmptyState";
-import { getReportPublicUrl, getReports, reportTypeLabels } from "@/lib/data/reports";
-import type { ReportType } from "@/types/database.types";
+import { getReports, reportTypeLabels } from "@/lib/data/reports";
+import type { ReportType } from "@/types/db";
 import { Download, FileText } from "lucide-react";
 
 const reportTypes: ReportType[] = ["financial", "performance", "minutes"];
@@ -38,7 +38,7 @@ export default async function ReportsPage() {
                     {items.map((report) => (
                       <a
                         key={report.id}
-                        href={getReportPublicUrl(report.file_url)}
+                        href={report.file_url}
                         target="_blank"
                         rel="noreferrer"
                         className="flex items-center justify-between rounded-xl border border-neutral-200 bg-white p-4 shadow-sm transition-colors hover:border-primary-300"

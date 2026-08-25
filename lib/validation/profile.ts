@@ -5,6 +5,11 @@ export const ProfileFormSchema = z.object({
   phone: z.string().trim().optional(),
 });
 
+export const NationalIdSchema = z
+  .string()
+  .trim()
+  .regex(/^\d{10}$/, "رقم الهوية الوطنية يجب أن يتكون من 10 أرقام.");
+
 export type ProfileFormState =
   | {
       error?: string;

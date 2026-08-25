@@ -1,7 +1,10 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { sql } from "@/lib/db";
+import { verifyPassword } from "@/lib/password";
+import { createSessionToken } from "@/lib/session";
+import { setSessionCookie, clearSessionCookie } from "@/lib/session-cookie";
 import {
   ForgotPasswordFormSchema,
   LoginFormSchema,
@@ -22,22 +25,31 @@ export async function login(
     return { error: validatedFields.error.issues[0]?.message };
   }
 
-  const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword(
-    validatedFields.data
-  );
+  const { email, password } = validatedFields.data;
 
-  if (error) {
+  const rows = (await sql`
+    SELECT u.id, u.password_hash, p.role
+    FROM users u
+    JOIN profiles p ON p.id = u.id
+    WHERE u.email = ${email}
+  `) as { id: string; password_hash: string; role: "member" | "admin" }[];
+
+  const user = rows[0];
+  const valid = user ? await verifyPassword(password, user.password_hash) : false;
+
+  if (!user || !valid) {
     return { error: "البريد الإلكتروني أو كلمة المرور غير صحيحة." };
   }
+
+  const token = await createSessionToken(user.id, user.role);
+  await setSessionCookie(token);
 
   const next = formData.get("next");
   redirect(typeof next === "string" && next.startsWith("/portal") ? next : "/portal");
 }
 
 export async function logout() {
-  const supabase = await createClient();
-  await supabase.auth.signOut();
+  await clearSessionCookie();
   redirect("/login");
 }
 
@@ -53,9 +65,7 @@ export async function requestPasswordReset(
     return { error: validatedFields.error.issues[0]?.message };
   }
 
-  const supabase = await createClient();
-  await supabase.auth.resetPasswordForEmail(validatedFields.data.email);
-
-  // Always report success to avoid leaking which emails have accounts.
+  // No email service is wired up yet, so this is a placeholder that always
+  // reports success (and avoids leaking which emails have accounts).
   return { success: true };
 }

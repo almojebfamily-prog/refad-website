@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { sql } from "@/lib/db";
 import { ContactFormSchema, type ContactFormState } from "@/lib/validation/contact";
 
 export async function submitContactMessage(
@@ -18,13 +18,13 @@ export async function submitContactMessage(
     return { errors: validatedFields.error.flatten().fieldErrors };
   }
 
-  try {
-    const supabase = await createClient();
-    const { error } = await supabase
-      .from("contact_messages")
-      .insert(validatedFields.data);
+  const { full_name, mobile, subject, message } = validatedFields.data;
 
-    if (error) throw error;
+  try {
+    await sql`
+      INSERT INTO contact_messages (full_name, mobile, subject, message)
+      VALUES (${full_name}, ${mobile}, ${subject}, ${message})
+    `;
 
     return { success: true, message: "تم إرسال رسالتك بنجاح، سنتواصل معك قريبًا." };
   } catch {

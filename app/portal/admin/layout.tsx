@@ -9,6 +9,10 @@ const adminLinks = [
   { href: "/portal/admin/family-members", label: "شجرة العائلة" },
   { href: "/portal/admin/members", label: "الأعضاء" },
   { href: "/portal/admin/messages", label: "رسائل التواصل" },
+  { href: "/portal/admin/media/family-news", label: "أخبار العائلة" },
+  { href: "/portal/admin/media/fund-news", label: "أخبار الصندوق" },
+  { href: "/portal/admin/media/videos", label: "مكتبة الفيديو" },
+  { href: "/portal/admin/media/magazine", label: "مجلة العائلة" },
 ];
 
 export default async function AdminLayout({
