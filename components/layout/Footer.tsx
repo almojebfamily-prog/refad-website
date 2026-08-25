@@ -1,14 +1,5 @@
-import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { SnapchatIcon, XIcon } from "@/components/shared/SocialIcons";
-
-const quickLinks = [
-  { href: "/", label: "الرئيسية" },
-  { href: "/about-family", label: "عن الأسرة" },
-  { href: "/refad-fund", label: "صندوق رفاد" },
-  { href: "/media-center", label: "مركز الإعلام" },
-  { href: "/contact", label: "تواصل معنا" },
-];
 
 const contactDetails = [
   { icon: Phone, label: "رقم التواصل", value: "+966 5X XXX XXXX", href: "tel:+9665XXXXXXXX" },
@@ -24,26 +15,12 @@ const socialLinks = [
 export function Footer() {
   return (
     <footer className="mt-auto bg-primary-900 text-primary-100">
-      <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:grid-cols-3">
-        <div>
-          <h3 className="mb-3 text-lg font-bold text-white">صندوق رفاد العائلي</h3>
-          <p className="text-sm leading-relaxed text-primary-200">
-            جذور راسخة، ومستقبل مشرق. المنصة الرقمية لعائلة المعجب لتعزيز
-            التواصل والتكافل بين أفراد العائلة عبر الأجيال.
-          </p>
-        </div>
-
-        <div>
-          <h3 className="mb-3 text-lg font-bold text-white">روابط سريعة</h3>
-          <ul className="space-y-2 text-sm">
-            {quickLinks.map((link) => (
-              <li key={link.href}>
-                <Link href={link.href} className="hover:text-white">
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+      <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:grid-cols-2">
+        <div className="flex items-center gap-2">
+          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-700 text-lg font-bold text-white">
+            ر
+          </span>
+          <span className="text-lg font-bold text-white">صندوق رفاد العائلي</span>
         </div>
 
         <div>
