@@ -16,11 +16,31 @@ export function Footer() {
   return (
     <footer className="mt-auto bg-primary-900 text-primary-100">
       <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:grid-cols-2">
-        <div className="flex items-center gap-2">
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-700 text-lg font-bold text-white">
-            ر
-          </span>
-          <span className="text-lg font-bold text-white">صندوق رفاد العائلي</span>
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-700 text-lg font-bold text-white">
+              ر
+            </span>
+            <span className="text-lg font-bold text-white">صندوق رفاد العائلي</span>
+          </div>
+
+          <h3 className="mb-3 mt-6 text-sm font-semibold text-white">
+            تابعنا على منصات التواصل
+          </h3>
+          <div className="flex items-center gap-3">
+            {socialLinks.map((social) => (
+              <a
+                key={social.label}
+                href={social.href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={social.label}
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-800 text-primary-100 transition-colors hover:bg-primary-700 hover:text-white"
+              >
+                <social.Icon className="h-4 w-4" />
+              </a>
+            ))}
+          </div>
         </div>
 
         <div>
@@ -42,24 +62,6 @@ export function Footer() {
               </li>
             ))}
           </ul>
-
-          <h3 className="mb-3 mt-6 text-sm font-semibold text-white">
-            تابعنا على منصات التواصل
-          </h3>
-          <div className="flex items-center gap-3">
-            {socialLinks.map((social) => (
-              <a
-                key={social.label}
-                href={social.href}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={social.label}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-800 text-primary-100 transition-colors hover:bg-primary-700 hover:text-white"
-              >
-                <social.Icon className="h-4 w-4" />
-              </a>
-            ))}
-          </div>
         </div>
       </div>
 
