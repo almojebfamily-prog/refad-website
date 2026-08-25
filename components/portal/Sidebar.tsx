@@ -18,7 +18,7 @@ const links = [
   { href: "/portal", label: "لوحة التحكم", icon: LayoutDashboard, exact: true },
   { href: "/portal/profile", label: "الملف الشخصي", icon: User },
   { href: "/portal/family-tree", label: "شجرة العائلة", icon: GitBranch },
-  { href: "/portal/services", label: "الخدمات", icon: Settings },
+  { href: "/portal/services", label: "المبادرات", icon: Settings },
   { href: "/portal/subscriptions", label: "الاشتراكات", icon: Wallet },
 ];
 

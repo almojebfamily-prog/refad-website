@@ -21,7 +21,7 @@ export default async function ServicesPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-primary-900">الخدمات</h1>
+        <h1 className="text-2xl font-bold text-primary-900">المبادرات</h1>
         <p className="mt-1 text-sm text-neutral-600">
           تصفح مبادرات الصندوق وقدّم طلب دعم عند الحاجة.
         </p>
