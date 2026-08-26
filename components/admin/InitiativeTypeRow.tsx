@@ -1,10 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Layers, Pencil } from "lucide-react";
 import { InitiativeTypeForm } from "@/components/admin/InitiativeTypeForm";
 import { DeleteButton } from "@/components/admin/DeleteButton";
-import { deleteInitiativeType } from "@/app/actions/admin/initiative-types";
+import {
+  deleteInitiativeType,
+  toggleInitiativeTypePublished,
+} from "@/app/actions/admin/initiative-types";
+import { cn } from "@/lib/utils";
 import type { InitiativeType } from "@/types/db";
 
 export function InitiativeTypeRow({
@@ -15,6 +19,7 @@ export function InitiativeTypeRow({
   subServiceCount: number;
 }) {
   const [editing, setEditing] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   if (editing) {
     return (
@@ -35,7 +40,24 @@ export function InitiativeTypeRow({
           </p>
         </div>
       </div>
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          disabled={isPending}
+          onClick={() =>
+            startTransition(() =>
+              toggleInitiativeTypePublished(type.id, !type.is_published)
+            )
+          }
+          className={cn(
+            "rounded-full px-3 py-1 text-xs font-semibold transition-colors disabled:opacity-50",
+            type.is_published
+              ? "bg-primary-50 text-primary-700 hover:bg-primary-100"
+              : "bg-neutral-200 text-neutral-600 hover:bg-neutral-300"
+          )}
+        >
+          {type.is_published ? "منشور على الموقع" : "غير منشور"}
+        </button>
         <button
           type="button"
           onClick={() => setEditing(true)}

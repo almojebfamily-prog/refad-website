@@ -61,6 +61,7 @@ export type InitiativeType = {
   id: string;
   title: string;
   order_index: number;
+  is_published: boolean;
 };
 
 export type Initiative = {

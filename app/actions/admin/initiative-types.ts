@@ -50,6 +50,14 @@ export async function saveInitiativeType(
   return undefined;
 }
 
+export async function toggleInitiativeTypePublished(id: string, isPublished: boolean) {
+  await requireAdmin();
+  await sql`UPDATE initiative_types SET is_published = ${isPublished} WHERE id = ${id}`;
+
+  revalidatePath("/portal/admin/initiative-types");
+  revalidatePath("/refad-fund/initiatives");
+}
+
 export async function deleteInitiativeType(id: string) {
   await requireAdmin();
   await sql`DELETE FROM initiative_types WHERE id = ${id}`;

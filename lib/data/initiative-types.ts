@@ -6,3 +6,9 @@ export async function getInitiativeTypes() {
     SELECT * FROM initiative_types ORDER BY order_index ASC
   `) as InitiativeType[];
 }
+
+export async function getPublishedInitiativeTypes() {
+  return (await sql`
+    SELECT * FROM initiative_types WHERE is_published = true ORDER BY order_index ASC
+  `) as InitiativeType[];
+}
