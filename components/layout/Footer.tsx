@@ -18,7 +18,7 @@ export function Footer() {
     <footer className="mt-auto bg-primary-900 text-primary-100">
       <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:grid-cols-2">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center">
             <Image
               src="/logo-website.png"
               alt="عائلة المعجب"
@@ -26,7 +26,6 @@ export function Footer() {
               height={44}
               className="h-11 w-11 object-contain"
             />
-            <span className="text-lg font-bold text-white">صندوق رفاد العائلي</span>
           </div>
 
           <h3 className="mb-3 mt-6 text-sm font-semibold text-white">

@@ -32,20 +32,17 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-neutral-200 bg-background/95 backdrop-blur">
-      <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-6">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
         <div className="flex items-center gap-10">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center">
             <Image
               src="/logo-website.png"
               alt="عائلة المعجب"
-              width={44}
-              height={44}
-              className="h-11 w-11 object-contain"
+              width={120}
+              height={120}
+              className="h-[120px] w-[120px] object-contain"
               priority
             />
-            <span className="text-lg font-bold text-primary-900">
-              صندوق رفاد العائلي
-            </span>
           </Link>
 
           <nav className="hidden items-center gap-8 lg:flex">

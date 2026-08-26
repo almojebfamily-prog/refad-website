@@ -6,13 +6,13 @@ export default function AuthLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <main className="flex flex-1 flex-col items-center justify-center bg-neutral-100 px-6 py-16">
-      <Link href="/" className="mb-8 flex items-center">
+      <Link href="/" className="mb-8 flex w-full max-w-[480px] items-center justify-center">
         <Image
           src="/logo-portal.png"
           alt="صندوق رفاد"
-          width={180}
-          height={50}
-          className="h-12 w-auto object-contain"
+          width={480}
+          height={320}
+          className="h-auto w-full max-w-[480px] object-contain"
           priority
         />
       </Link>

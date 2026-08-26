@@ -110,13 +110,16 @@ export function Sidebar({ isAdmin }: { isAdmin: boolean }) {
 
   return (
     <aside className="flex h-full w-64 shrink-0 flex-col overflow-y-auto border-e border-neutral-200 bg-white">
-      <Link href="/" className="flex items-center border-b border-neutral-200 px-6 py-4">
+      <Link
+        href="/"
+        className="flex items-center justify-center border-b border-neutral-200 px-6 py-6"
+      >
         <Image
           src="/logo-portal.png"
           alt="صندوق رفاد"
-          width={140}
-          height={40}
-          className="h-9 w-auto object-contain"
+          width={180}
+          height={120}
+          className="h-[120px] w-auto object-contain"
           priority
         />
       </Link>
