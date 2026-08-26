@@ -67,6 +67,7 @@ create table board_members (
 create table initiative_types (
   id uuid primary key default gen_random_uuid(),
   title text not null,
+  description text,
   order_index int not null default 0,
   is_published boolean not null default true
 );

@@ -31,6 +31,13 @@ export function InitiativeTypeForm({
         defaultValue={type?.order_index ?? 0}
         className="rounded-lg border border-neutral-300 px-3 py-2 text-sm"
       />
+      <textarea
+        name="description"
+        placeholder="وصف مختصر يظهر للزوار على الموقع العام (اختياري)"
+        defaultValue={type?.description ?? ""}
+        rows={2}
+        className="rounded-lg border border-neutral-300 px-3 py-2 text-sm sm:col-span-2"
+      />
 
       {state?.error && (
         <p className="text-sm font-medium text-red-600 sm:col-span-2">{state.error}</p>

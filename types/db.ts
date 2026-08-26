@@ -60,6 +60,7 @@ export type BoardMember = {
 export type InitiativeType = {
   id: string;
   title: string;
+  description: string | null;
   order_index: number;
   is_published: boolean;
 };

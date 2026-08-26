@@ -30,7 +30,10 @@ export default async function InitiativesPage() {
                   <Sprout className="h-6 w-6" />
                 </div>
                 <h3 className="text-lg font-bold text-primary-900">{type.title}</h3>
-                <p className="mt-2 text-sm text-neutral-600">
+                {type.description && (
+                  <p className="mt-2 text-sm text-neutral-600">{type.description}</p>
+                )}
+                <p className="mt-3 text-sm text-neutral-600">
                   <Link href="/login" className="font-medium text-primary-700 hover:underline">
                     سجّل الدخول
                   </Link>{" "}
