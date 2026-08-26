@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import {
+  ChevronDown,
   GitBranch,
   LayoutDashboard,
   LogOut,
@@ -24,8 +26,8 @@ const links = [
 const adminGroups = [
   {
     title: "نظرة عامة",
-    href: "/portal/admin",
     items: [
+      { href: "/portal/admin", label: "لوحة الإحصائيات", exact: true },
       { href: "/portal/admin/board", label: "مجلس الأمناء" },
       { href: "/portal/admin/initiative-types", label: "أنواع المبادرات" },
       { href: "/portal/admin/initiatives", label: "المبادرات" },
@@ -60,6 +62,30 @@ const adminGroups = [
 
 export function Sidebar({ isAdmin }: { isAdmin: boolean }) {
   const pathname = usePathname();
+  const [openGroups, setOpenGroups] = useState<Set<string>>(
+    () =>
+      new Set(
+        adminGroups
+          .filter((group) =>
+            group.items.some((item) =>
+              item.exact ? pathname === item.href : pathname.startsWith(item.href)
+            )
+          )
+          .map((group) => group.title)
+      )
+  );
+
+  function toggleGroup(title: string) {
+    setOpenGroups((prev) => {
+      const next = new Set(prev);
+      if (next.has(title)) {
+        next.delete(title);
+      } else {
+        next.add(title);
+      }
+      return next;
+    });
+  }
 
   return (
     <aside className="flex h-full w-64 shrink-0 flex-col overflow-y-auto border-e border-neutral-200 bg-white">
@@ -97,44 +123,46 @@ export function Sidebar({ isAdmin }: { isAdmin: boolean }) {
             <p className="px-3 pt-4 pb-1 text-xs font-semibold text-neutral-500">
               الإدارة
             </p>
-            {adminGroups.map((group) => (
-              <div key={group.title} className="mt-3 first:mt-0">
-                {group.href ? (
-                  <Link
-                    href={group.href}
-                    className={cn(
-                      "block px-3 pb-1 text-xs font-semibold transition-colors",
-                      pathname === group.href
-                        ? "text-primary-700"
-                        : "text-neutral-500 hover:text-primary-700"
-                    )}
+            {adminGroups.map((group) => {
+              const open = openGroups.has(group.title);
+              return (
+                <div key={group.title} className="mt-1 first:mt-0">
+                  <button
+                    type="button"
+                    onClick={() => toggleGroup(group.title)}
+                    className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-semibold text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-primary-700"
                   >
                     {group.title}
-                  </Link>
-                ) : (
-                  <p className="px-3 pb-1 text-xs font-semibold text-neutral-500">
-                    {group.title}
-                  </p>
-                )}
-                {group.items.map((item) => {
-                  const active = pathname.startsWith(item.href);
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={cn(
-                        "block rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                        active
-                          ? "bg-primary-50 text-primary-800"
-                          : "text-neutral-700 hover:bg-neutral-100"
-                      )}
-                    >
-                      {item.label}
-                    </Link>
-                  );
-                })}
-              </div>
-            ))}
+                    <ChevronDown
+                      className={cn("h-3.5 w-3.5 transition-transform", open && "rotate-180")}
+                    />
+                  </button>
+                  {open && (
+                    <div className="mt-1 space-y-1">
+                      {group.items.map((item) => {
+                        const active = item.exact
+                          ? pathname === item.href
+                          : pathname.startsWith(item.href);
+                        return (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            className={cn(
+                              "block rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                              active
+                                ? "bg-primary-50 text-primary-800"
+                                : "text-neutral-700 hover:bg-neutral-100"
+                            )}
+                          >
+                            {item.label}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </>
         )}
       </nav>
