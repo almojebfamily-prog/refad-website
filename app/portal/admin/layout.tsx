@@ -1,5 +1,4 @@
 import { requireAdmin } from "@/lib/auth";
-import { AdminSidebar } from "@/components/admin/AdminSidebar";
 
 export default async function AdminLayout({
   children,
@@ -15,10 +14,7 @@ export default async function AdminLayout({
         </p>
       </div>
 
-      <div className="flex gap-8">
-        <AdminSidebar />
-        <div className="min-w-0 flex-1">{children}</div>
-      </div>
+      {children}
     </div>
   );
 }
