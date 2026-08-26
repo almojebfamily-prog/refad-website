@@ -8,7 +8,6 @@ export const CreateMemberFormSchema = z.object({
   national_id: z.preprocess(emptyToUndefined, NationalIdSchema.optional()),
   email: z.email("الرجاء إدخال بريد إلكتروني صحيح."),
   password: z.string().min(8, "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل."),
-  role: z.enum(["member", "admin"]),
 });
 
 export type MemberFormState = { error?: string } | undefined;

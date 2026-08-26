@@ -1,10 +1,10 @@
-import { getAllProfiles } from "@/lib/data/members";
+import { getProfilesByRole } from "@/lib/data/members";
 import { MemberForm } from "@/components/admin/MemberForm";
 import { MemberRow } from "@/components/admin/MemberRow";
 import { EmptyState } from "@/components/shared/EmptyState";
 
 export default async function AdminMembersPage() {
-  const profiles = await getAllProfiles().catch(() => null);
+  const profiles = await getProfilesByRole("member").catch(() => null);
 
   return (
     <div className="space-y-8">

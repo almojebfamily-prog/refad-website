@@ -3,12 +3,8 @@
 import { useState, useTransition } from "react";
 import { Check, User } from "lucide-react";
 import { DeleteButton } from "@/components/admin/DeleteButton";
-import {
-  deleteMember,
-  updateMemberNationalId,
-  updateMemberRole,
-} from "@/app/actions/admin/members";
-import type { Profile, ProfileRole } from "@/types/db";
+import { deleteMember, updateMemberNationalId } from "@/app/actions/admin/members";
+import type { Profile } from "@/types/db";
 
 export function MemberRow({ profile }: { profile: Profile }) {
   const [isPending, startTransition] = useTransition();
@@ -58,19 +54,6 @@ export function MemberRow({ profile }: { profile: Profile }) {
             <p className="mt-1 text-xs text-red-600">{nationalIdError}</p>
           )}
         </div>
-        <select
-          defaultValue={profile.role}
-          disabled={isPending}
-          onChange={(e) =>
-            startTransition(() =>
-              updateMemberRole(profile.id, e.target.value as ProfileRole)
-            )
-          }
-          className="rounded-lg border border-neutral-300 px-2 py-1.5 text-xs"
-        >
-          <option value="member">عضو</option>
-          <option value="admin">مسؤول</option>
-        </select>
         <DeleteButton
           action={() => deleteMember(profile.id)}
           confirmMessage="هل أنت متأكد من حذف هذا الحساب؟"

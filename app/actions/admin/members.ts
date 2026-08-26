@@ -18,14 +18,13 @@ export async function createMember(
     national_id: formData.get("national_id"),
     email: formData.get("email"),
     password: formData.get("password"),
-    role: formData.get("role"),
   });
 
   if (!validatedFields.success) {
     return { error: validatedFields.error.issues[0]?.message };
   }
 
-  const { full_name, national_id, email, password, role } = validatedFields.data;
+  const { full_name, national_id, email, password } = validatedFields.data;
   const passwordHash = await hashPassword(password);
 
   let userId: string;
@@ -43,7 +42,7 @@ export async function createMember(
   try {
     await sql`
       INSERT INTO profiles (id, full_name, national_id, role)
-      VALUES (${userId}, ${full_name}, ${national_id ?? null}, ${role})
+      VALUES (${userId}, ${full_name}, ${national_id ?? null}, 'member')
     `;
   } catch {
     await sql`DELETE FROM users WHERE id = ${userId}`;
@@ -71,6 +70,7 @@ export async function updateMemberRole(id: string, role: "member" | "admin") {
   await sql`UPDATE profiles SET role = ${role} WHERE id = ${id}`;
 
   revalidatePath("/portal/admin/members");
+  revalidatePath("/portal/admin/administrators");
 }
 
 export async function updateMemberNationalId(id: string, nationalId: string) {
@@ -99,4 +99,5 @@ export async function deleteMember(id: string) {
   await sql`DELETE FROM users WHERE id = ${id}`;
 
   revalidatePath("/portal/admin/members");
+  revalidatePath("/portal/admin/administrators");
 }
