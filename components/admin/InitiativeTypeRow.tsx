@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Layers, Pencil } from "lucide-react";
+import { Pencil } from "lucide-react";
 import { InitiativeTypeForm } from "@/components/admin/InitiativeTypeForm";
+import { InitiativeIcon } from "@/components/shared/InitiativeIcon";
 import { DeleteButton } from "@/components/admin/DeleteButton";
 import {
   deleteInitiativeType,
@@ -32,7 +33,7 @@ export function InitiativeTypeRow({
   return (
     <div className="flex items-center justify-between rounded-xl border border-neutral-200 bg-white p-4">
       <div className="flex items-center gap-3">
-        <Layers className="h-5 w-5 shrink-0 text-primary-700" />
+        <InitiativeIcon name={type.icon} size={20} className="shrink-0 text-primary-700" />
         <div>
           <p className="font-medium text-primary-900">{type.title}</p>
           <p className="text-xs text-neutral-500">

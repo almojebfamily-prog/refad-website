@@ -18,6 +18,7 @@ export async function saveInitiativeType(
     id: formData.get("id") || undefined,
     title: formData.get("title"),
     description: formData.get("description"),
+    icon: formData.get("icon"),
     order_index: formData.get("order_index") || 0,
   });
 
@@ -25,19 +26,20 @@ export async function saveInitiativeType(
     return { error: validatedFields.error.issues[0]?.message };
   }
 
-  const { id, title, description, order_index } = validatedFields.data;
+  const { id, title, description, icon, order_index } = validatedFields.data;
 
   try {
     if (id) {
       await sql`
         UPDATE initiative_types
-        SET title = ${title}, description = ${description ?? null}, order_index = ${order_index}
+        SET title = ${title}, description = ${description ?? null},
+            icon = ${icon ?? null}, order_index = ${order_index}
         WHERE id = ${id}
       `;
     } else {
       await sql`
-        INSERT INTO initiative_types (title, description, order_index)
-        VALUES (${title}, ${description ?? null}, ${order_index})
+        INSERT INTO initiative_types (title, description, icon, order_index)
+        VALUES (${title}, ${description ?? null}, ${icon ?? null}, ${order_index})
       `;
     }
   } catch {
