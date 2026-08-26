@@ -38,9 +38,9 @@ export function Header() {
             <Image
               src="/logo-website.png"
               alt="عائلة المعجب"
-              width={120}
-              height={120}
-              className="h-[120px] w-[120px] object-contain"
+              width={140}
+              height={140}
+              className="h-[140px] w-[140px] object-contain"
               priority
             />
           </Link>

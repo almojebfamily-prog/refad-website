@@ -22,9 +22,9 @@ export function Footer() {
             <Image
               src="/logo-website.png"
               alt="عائلة المعجب"
-              width={44}
-              height={44}
-              className="h-11 w-11 object-contain"
+              width={140}
+              height={140}
+              className="h-[140px] w-[140px] object-contain"
             />
           </div>
 
