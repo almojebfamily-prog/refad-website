@@ -5,6 +5,7 @@ export type SupportRequestStatus = "pending" | "rejected" | "completed";
 export type ContactMessageStatus = "new" | "read" | "archived";
 export type Gender = "male" | "female";
 export type NewsCategory = "family" | "fund";
+export type TaskStatus = "todo" | "in_progress" | "done";
 
 export type User = {
   id: string;
@@ -134,4 +135,18 @@ export type MagazineIssue = {
   issue_label: string | null;
   file_url: string;
   published_date: string;
+};
+
+export type Task = {
+  id: string;
+  title: string;
+  description: string | null;
+  assignee_id: string | null;
+  status: TaskStatus;
+  due_date: string | null;
+  created_at: string;
+};
+
+export type TaskWithAssignee = Task & {
+  assignee_name: string | null;
 };

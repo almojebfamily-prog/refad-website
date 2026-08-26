@@ -11,6 +11,7 @@ create type support_request_status as enum ('pending', 'rejected', 'completed');
 create type contact_message_status as enum ('new', 'read', 'archived');
 create type gender as enum ('male', 'female');
 create type news_category as enum ('family', 'fund');
+create type task_status as enum ('todo', 'in_progress', 'done');
 
 -- ── Tables ───────────────────────────────────────────────────────────────
 create table users (
@@ -136,6 +137,16 @@ create table magazine_issues (
   issue_label text,
   file_url text not null,
   published_date date not null default current_date
+);
+
+create table tasks (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  description text,
+  assignee_id uuid references profiles (id) on delete set null,
+  status task_status not null default 'todo',
+  due_date date,
+  created_at timestamptz not null default now()
 );
 
 -- Authorization is enforced in the application layer (lib/auth.ts), not via
