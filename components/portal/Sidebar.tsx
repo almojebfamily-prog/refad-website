@@ -55,6 +55,7 @@ const adminGroups = [
       { href: "/portal/admin/tasks", label: "المهام" },
       { href: "/portal/admin/support-requests", label: "طلبات الدعم" },
       { href: "/portal/admin/member-requests", label: "دعم طلبات الأعضاء" },
+      { href: "/portal/admin/registration-requests", label: "طلبات التسجيل" },
       { href: "/portal/admin/messages", label: "رسائل التواصل" },
     ],
   },

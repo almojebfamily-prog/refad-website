@@ -8,6 +8,7 @@ export type NewsCategory = "family" | "fund";
 export type TaskStatus = "todo" | "in_progress" | "done";
 export type MemberRequestType = "news" | "family_member" | "other";
 export type MemberRequestStatus = "pending" | "rejected" | "completed";
+export type RegistrationRequestStatus = "pending" | "approved" | "rejected";
 
 export type User = {
   id: string;
@@ -165,4 +166,15 @@ export type MemberRequest = {
 
 export type MemberRequestWithDetails = MemberRequest & {
   member_name: string;
+};
+
+export type RegistrationRequest = {
+  id: string;
+  full_name: string;
+  national_id: string;
+  phone: string;
+  email: string;
+  status: RegistrationRequestStatus;
+  admin_comment: string | null;
+  created_at: string;
 };

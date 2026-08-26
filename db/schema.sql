@@ -14,6 +14,7 @@ create type news_category as enum ('family', 'fund');
 create type task_status as enum ('todo', 'in_progress', 'done');
 create type member_request_type as enum ('news', 'family_member', 'other');
 create type member_request_status as enum ('pending', 'rejected', 'completed');
+create type registration_request_status as enum ('pending', 'approved', 'rejected');
 
 -- ── Tables ───────────────────────────────────────────────────────────────
 create table users (
@@ -157,6 +158,17 @@ create table member_requests (
   type member_request_type not null,
   details text not null,
   status member_request_status not null default 'pending',
+  admin_comment text,
+  created_at timestamptz not null default now()
+);
+
+create table registration_requests (
+  id uuid primary key default gen_random_uuid(),
+  full_name text not null,
+  national_id text not null,
+  phone text not null,
+  email text not null,
+  status registration_request_status not null default 'pending',
   admin_comment text,
   created_at timestamptz not null default now()
 );

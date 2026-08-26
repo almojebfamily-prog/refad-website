@@ -50,6 +50,12 @@ export function LoginForm({ next }: { next?: string }) {
           نسيت كلمة المرور؟
         </Link>
       </p>
+      <p className="text-center text-sm text-neutral-600">
+        ليس لديك حساب؟{" "}
+        <Link href="/register" className="font-medium text-primary-700 hover:underline">
+          طلب تسجيل عضوية جديدة
+        </Link>
+      </p>
     </form>
   );
 }
