@@ -3,7 +3,7 @@ import { Section } from "@/components/shared/Section";
 import { FundSubNav } from "@/components/refad-fund/FundSubNav";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { getBoardMembers } from "@/lib/data/board";
-import { User } from "lucide-react";
+import { MemberPhoto } from "@/components/shared/MemberPhoto";
 
 export default async function BoardOfTrusteesPage() {
   const members = await getBoardMembers().catch(() => null);
@@ -27,9 +27,7 @@ export default async function BoardOfTrusteesPage() {
                 key={member.id}
                 className="rounded-2xl border border-neutral-200 bg-white p-6 text-center shadow-sm"
               >
-                <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-primary-50 text-primary-700">
-                  <User className="h-10 w-10" />
-                </div>
+                <MemberPhoto src={member.photo_url} size={80} className="mx-auto mb-4" />
                 <h3 className="text-lg font-bold text-primary-900">
                   {member.full_name}
                 </h3>

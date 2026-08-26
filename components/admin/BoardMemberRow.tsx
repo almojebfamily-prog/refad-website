@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Pencil, User } from "lucide-react";
+import { Pencil } from "lucide-react";
 import { BoardMemberForm } from "@/components/admin/BoardMemberForm";
 import { DeleteButton } from "@/components/admin/DeleteButton";
+import { MemberPhoto } from "@/components/shared/MemberPhoto";
 import { deleteBoardMember } from "@/app/actions/admin/board";
 import type { BoardMember } from "@/types/db";
 
@@ -21,9 +22,7 @@ export function BoardMemberRow({ member }: { member: BoardMember }) {
   return (
     <div className="flex items-center justify-between rounded-xl border border-neutral-200 bg-white p-4">
       <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-50 text-primary-700">
-          <User className="h-5 w-5" />
-        </div>
+        <MemberPhoto src={member.photo_url} size={40} />
         <div>
           <p className="font-medium text-primary-900">{member.full_name}</p>
           <p className="text-xs text-neutral-500">{member.role_title}</p>
