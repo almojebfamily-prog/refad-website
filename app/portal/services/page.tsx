@@ -37,7 +37,7 @@ export default async function ServicesPage() {
           return (
             <div key={type.id}>
               <h2 className="mb-3 flex items-center gap-2 text-lg font-bold text-primary-900">
-                <InitiativeIcon name={type.icon} size={20} className="text-primary-700" />
+                <InitiativeIcon src={type.icon} size={20} className="text-primary-700" />
                 {type.title}
               </h2>
               <div className="grid gap-6 sm:grid-cols-2">

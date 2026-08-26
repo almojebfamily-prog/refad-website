@@ -27,7 +27,7 @@ export default async function InitiativesPage() {
                 className="rounded-2xl border border-neutral-200 bg-white p-6 text-center shadow-sm"
               >
                 <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary-50 text-primary-700">
-                  <InitiativeIcon name={type.icon} size={24} />
+                  <InitiativeIcon src={type.icon} size={24} />
                 </div>
                 <h3 className="text-lg font-bold text-primary-900">{type.title}</h3>
                 {type.description && (

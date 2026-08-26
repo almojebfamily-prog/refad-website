@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useRef, useState } from "react";
 import { saveInitiativeType } from "@/app/actions/admin/initiative-types";
 import { Button } from "@/components/shared/Button";
 import { InitiativeIcon } from "@/components/shared/InitiativeIcon";
@@ -14,11 +14,29 @@ export function InitiativeTypeForm({
   onDone?: () => void;
 }) {
   const [state, action, pending] = useActionState(saveInitiativeType, undefined);
-  const [iconName, setIconName] = useState(type?.icon ?? "");
+  const [previewUrl, setPreviewUrl] = useState(type?.icon ?? null);
+  const [removeIcon, setRemoveIcon] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setPreviewUrl(URL.createObjectURL(file));
+    setRemoveIcon(false);
+  }
+
+  function handleRemove() {
+    setPreviewUrl(null);
+    setRemoveIcon(true);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }
 
   return (
     <form action={action} className="grid gap-3 sm:grid-cols-2">
       {type && <input type="hidden" name="id" value={type.id} />}
+      <input type="hidden" name="current_icon_url" value={type?.icon ?? ""} />
+      <input type="hidden" name="remove_icon" value={removeIcon ? "true" : "false"} />
+
       <input
         name="title"
         placeholder="اسم النوع (مثال: الدعم الاجتماعي)"
@@ -42,31 +60,30 @@ export function InitiativeTypeForm({
       />
 
       <div className="sm:col-span-2">
-        <label htmlFor="icon" className="mb-1.5 block text-xs font-medium text-neutral-600">
-          اسم الأيقونة (من{" "}
-          <a
-            href="https://lucide.dev/icons"
-            target="_blank"
-            rel="noreferrer"
-            className="text-primary-700 hover:underline"
-          >
-            lucide.dev/icons
-          </a>
-          ، مثال: hand-heart)
+        <label className="mb-1.5 block text-xs font-medium text-neutral-600">
+          أيقونة النوع (SVG أو PNG أو WebP)
         </label>
-        <div className="flex items-center gap-2">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 text-primary-700">
-            <InitiativeIcon name={iconName} size={20} />
+        <div className="flex items-center gap-3">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 text-primary-700">
+            <InitiativeIcon src={previewUrl} size={28} />
           </div>
           <input
-            id="icon"
-            name="icon"
-            dir="ltr"
-            value={iconName}
-            onChange={(e) => setIconName(e.target.value)}
-            placeholder="hand-heart"
-            className="flex-1 rounded-lg border border-neutral-300 px-3 py-2 text-sm"
+            ref={fileInputRef}
+            name="icon_file"
+            type="file"
+            accept="image/svg+xml,image/png,image/webp"
+            onChange={handleFileChange}
+            className="flex-1 text-sm"
           />
+          {previewUrl && (
+            <button
+              type="button"
+              onClick={handleRemove}
+              className="rounded-lg px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50"
+            >
+              إزالة
+            </button>
+          )}
         </div>
       </div>
 
