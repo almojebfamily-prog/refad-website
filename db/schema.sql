@@ -12,6 +12,8 @@ create type contact_message_status as enum ('new', 'read', 'archived');
 create type gender as enum ('male', 'female');
 create type news_category as enum ('family', 'fund');
 create type task_status as enum ('todo', 'in_progress', 'done');
+create type member_request_type as enum ('news', 'family_member', 'other');
+create type member_request_status as enum ('pending', 'rejected', 'completed');
 
 -- ── Tables ───────────────────────────────────────────────────────────────
 create table users (
@@ -146,6 +148,16 @@ create table tasks (
   assignee_id uuid references profiles (id) on delete set null,
   status task_status not null default 'todo',
   due_date date,
+  created_at timestamptz not null default now()
+);
+
+create table member_requests (
+  id uuid primary key default gen_random_uuid(),
+  profile_id uuid not null references profiles (id) on delete cascade,
+  type member_request_type not null,
+  details text not null,
+  status member_request_status not null default 'pending',
+  admin_comment text,
   created_at timestamptz not null default now()
 );
 

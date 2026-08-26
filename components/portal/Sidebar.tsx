@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
   ChevronDown,
+  ClipboardList,
   GitBranch,
   LayoutDashboard,
   LogOut,
@@ -20,6 +21,7 @@ const links = [
   { href: "/portal/profile", label: "الملف الشخصي", icon: User },
   { href: "/portal/family-tree", label: "شجرة العائلة", icon: GitBranch },
   { href: "/portal/services", label: "المبادرات", icon: Settings },
+  { href: "/portal/requests", label: "طلباتي", icon: ClipboardList },
   { href: "/portal/subscriptions", label: "الاشتراكات", icon: Wallet },
 ];
 
@@ -29,8 +31,6 @@ const adminGroups = [
     items: [
       { href: "/portal/admin", label: "لوحة الإحصائيات", exact: true },
       { href: "/portal/admin/board", label: "مجلس الأمناء" },
-      { href: "/portal/admin/initiative-types", label: "أنواع المبادرات" },
-      { href: "/portal/admin/initiatives", label: "المبادرات" },
       { href: "/portal/admin/reports", label: "التقارير" },
     ],
   },
@@ -46,6 +46,7 @@ const adminGroups = [
     items: [
       { href: "/portal/admin/tasks", label: "المهام" },
       { href: "/portal/admin/support-requests", label: "طلبات الدعم" },
+      { href: "/portal/admin/member-requests", label: "دعم طلبات الأعضاء" },
       { href: "/portal/admin/messages", label: "رسائل التواصل" },
     ],
   },
@@ -56,6 +57,13 @@ const adminGroups = [
       { href: "/portal/admin/media/fund-news", label: "أخبار الصندوق" },
       { href: "/portal/admin/media/videos", label: "مكتبة الفيديو" },
       { href: "/portal/admin/media/magazine", label: "مجلة العائلة" },
+    ],
+  },
+  {
+    title: "لوحة الإعدادات",
+    items: [
+      { href: "/portal/admin/initiative-types", label: "أنواع المبادرات" },
+      { href: "/portal/admin/initiatives", label: "المبادرات" },
     ],
   },
 ];

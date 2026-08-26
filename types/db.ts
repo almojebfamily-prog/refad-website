@@ -6,6 +6,8 @@ export type ContactMessageStatus = "new" | "read" | "archived";
 export type Gender = "male" | "female";
 export type NewsCategory = "family" | "fund";
 export type TaskStatus = "todo" | "in_progress" | "done";
+export type MemberRequestType = "news" | "family_member" | "other";
+export type MemberRequestStatus = "pending" | "rejected" | "completed";
 
 export type User = {
   id: string;
@@ -149,4 +151,18 @@ export type Task = {
 
 export type TaskWithAssignee = Task & {
   assignee_name: string | null;
+};
+
+export type MemberRequest = {
+  id: string;
+  profile_id: string;
+  type: MemberRequestType;
+  details: string;
+  status: MemberRequestStatus;
+  admin_comment: string | null;
+  created_at: string;
+};
+
+export type MemberRequestWithDetails = MemberRequest & {
+  member_name: string;
 };
