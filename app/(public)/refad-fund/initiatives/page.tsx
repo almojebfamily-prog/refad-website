@@ -31,14 +31,16 @@ export default async function InitiativesPage() {
                 </div>
                 <h3 className="text-lg font-bold text-primary-900">{type.title}</h3>
                 {type.description && (
-                  <p className="mt-2 text-sm text-neutral-600">{type.description}</p>
+                  <>
+                    <p className="mt-2 text-sm text-neutral-600">{type.description}</p>
+                    <p className="mt-3 text-sm text-neutral-600">
+                      <Link href="/login" className="font-medium text-primary-700 hover:underline">
+                        سجّل الدخول
+                      </Link>{" "}
+                      للاطلاع على تفاصيل هذه المبادرة وخدماتها.
+                    </p>
+                  </>
                 )}
-                <p className="mt-3 text-sm text-neutral-600">
-                  <Link href="/login" className="font-medium text-primary-700 hover:underline">
-                    سجّل الدخول
-                  </Link>{" "}
-                  للاطلاع على تفاصيل هذه المبادرة وخدماتها.
-                </p>
               </div>
             ))}
           </div>
