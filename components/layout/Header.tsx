@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
@@ -34,9 +35,14 @@ export function Header() {
       <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-6">
         <div className="flex items-center gap-10">
           <Link href="/" className="flex items-center gap-2">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-700 text-lg font-bold text-white">
-              ر
-            </span>
+            <Image
+              src="/logo-website.png"
+              alt="عائلة المعجب"
+              width={44}
+              height={44}
+              className="h-11 w-11 object-contain"
+              priority
+            />
             <span className="text-lg font-bold text-primary-900">
               صندوق رفاد العائلي
             </span>

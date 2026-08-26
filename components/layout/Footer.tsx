@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { SnapchatIcon, XIcon } from "@/components/shared/SocialIcons";
 
@@ -18,9 +19,13 @@ export function Footer() {
       <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:grid-cols-2">
         <div>
           <div className="flex items-center gap-2">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-700 text-lg font-bold text-white">
-              ر
-            </span>
+            <Image
+              src="/logo-website.png"
+              alt="عائلة المعجب"
+              width={44}
+              height={44}
+              className="h-11 w-11 object-contain"
+            />
             <span className="text-lg font-bold text-white">صندوق رفاد العائلي</span>
           </div>
 

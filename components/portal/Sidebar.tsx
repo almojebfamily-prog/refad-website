@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -109,11 +110,15 @@ export function Sidebar({ isAdmin }: { isAdmin: boolean }) {
 
   return (
     <aside className="flex h-full w-64 shrink-0 flex-col overflow-y-auto border-e border-neutral-200 bg-white">
-      <Link href="/" className="flex items-center gap-2 border-b border-neutral-200 px-6 py-5">
-        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-700 text-sm font-bold text-white">
-          ر
-        </span>
-        <span className="text-sm font-bold text-primary-900">صندوق رفاد</span>
+      <Link href="/" className="flex items-center border-b border-neutral-200 px-6 py-4">
+        <Image
+          src="/logo-portal.png"
+          alt="صندوق رفاد"
+          width={140}
+          height={40}
+          className="h-9 w-auto object-contain"
+          priority
+        />
       </Link>
 
       <nav className="flex-1 space-y-1 px-3 py-4">
