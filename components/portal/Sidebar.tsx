@@ -6,11 +6,16 @@ import { useState } from "react";
 import {
   ChevronDown,
   ClipboardList,
+  Gauge,
   GitBranch,
   LayoutDashboard,
+  LifeBuoy,
   LogOut,
+  Newspaper,
   Settings,
+  SlidersHorizontal,
   User,
+  Users2,
   Wallet,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -28,6 +33,7 @@ const links = [
 const adminGroups = [
   {
     title: "نظرة عامة",
+    icon: Gauge,
     items: [
       { href: "/portal/admin", label: "لوحة الإحصائيات", exact: true },
       { href: "/portal/admin/board", label: "مجلس الأمناء" },
@@ -36,6 +42,7 @@ const adminGroups = [
   },
   {
     title: "الأعضاء والشجرة",
+    icon: Users2,
     items: [
       { href: "/portal/admin/members", label: "الأعضاء" },
       { href: "/portal/admin/family-members", label: "شجرة العائلة" },
@@ -43,6 +50,7 @@ const adminGroups = [
   },
   {
     title: "العمليات والدعم",
+    icon: LifeBuoy,
     items: [
       { href: "/portal/admin/tasks", label: "المهام" },
       { href: "/portal/admin/support-requests", label: "طلبات الدعم" },
@@ -52,6 +60,7 @@ const adminGroups = [
   },
   {
     title: "المركز الإعلامي والمحتوى",
+    icon: Newspaper,
     items: [
       { href: "/portal/admin/media/family-news", label: "أخبار العائلة" },
       { href: "/portal/admin/media/fund-news", label: "أخبار الصندوق" },
@@ -61,6 +70,7 @@ const adminGroups = [
   },
   {
     title: "لوحة الإعدادات",
+    icon: SlidersHorizontal,
     items: [
       { href: "/portal/admin/initiative-types", label: "أنواع المبادرات" },
       { href: "/portal/admin/initiatives", label: "المبادرات" },
@@ -140,7 +150,10 @@ export function Sidebar({ isAdmin }: { isAdmin: boolean }) {
                     onClick={() => toggleGroup(group.title)}
                     className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-semibold text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-primary-700"
                   >
-                    {group.title}
+                    <span className="flex items-center gap-2">
+                      <group.icon className="h-4 w-4" />
+                      {group.title}
+                    </span>
                     <ChevronDown
                       className={cn("h-3.5 w-3.5 transition-transform", open && "rotate-180")}
                     />
